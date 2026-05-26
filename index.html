@@ -989,13 +989,18 @@ async function saveAll(){
 
   const scene = getScene();
 
-  await db
+  const deleteResult = await db
     .from("dialogs")
     .delete()
     .eq("scene", currentScene);
 
+  if(deleteResult.error){
+    console.error("Delete error:", deleteResult.error);
+    return;
+  }
+
   for(const item of scene.dialogs){
-    await db.from("dialogs").insert({
+    const insertResult = await db.from("dialogs").insert({
       scene: currentScene,
       character: item.name,
       message: item.text,
@@ -1005,6 +1010,10 @@ async function saveAll(){
       place: scene.place || "",
       situation: scene.situation || ""
     });
+
+    if(insertResult.error){
+      console.error("Insert error:", insertResult.error);
+    }
   }
 }
 
@@ -1018,6 +1027,22 @@ function avatarSrc(avatar){
 
 function getWeather(){
   return document.querySelector('input[name="weather"]:checked').value;
+}
+
+function loadScene(){
+  const scene = getScene();
+
+  placeInput.value = scene.place || "";
+  situationInput.value = scene.situation || "";
+
+  const weatherValue = scene.weather || "☀️ Cerah";
+  const weatherInput = document.querySelector(`input[name="weather"][value="${weatherValue}"]`);
+
+  if(weatherInput){
+    weatherInput.checked = true;
+  }
+
+  renderScript();
 }
 
 async function loadFromSupabase(){
