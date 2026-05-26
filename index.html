@@ -1358,7 +1358,7 @@ addActorBtn.addEventListener("click", async function(){
     addActorBtn.innerText = "Tambah Tokoh";
   }
 
-  saveActors();
+  await saveActors();
   renderActors();
 
   actorNameInput.value = "";
@@ -1377,12 +1377,11 @@ window.editActor = function(index){
   addActorBtn.innerText = "Simpan Tokoh";
 };
 
-window.deleteActor = function(index){
+window.deleteActor = async function(index){
   actors.splice(index, 1);
-  saveActors();
+  await saveActors();
   renderActors();
 };
-
 renderActors();
 
 copyBtn.addEventListener("click", function(){
