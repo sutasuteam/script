@@ -918,9 +918,9 @@ button.danger{background:#e63946}
 <script>
 const supabaseUrl = 'https://btagjtzfoyadcnqfgjsg.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ0YWpndHpmb3lhZGNucWZnanNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3NTQ3NzEsImV4cCI6MjA5NTMzMDc3MX0.kD81Imzw3NQ_ZTgj5nRPrKfh7Ong7Zmwt7I7WeyeM5M';
-
 const db = window.supabase.createClient(supabaseUrl, supabaseKey);
-console.log("Supabase connected!");
+window.db = db;
+console.log("✅ Supabase connected!");
 </script>
 
 <script>
@@ -985,19 +985,11 @@ function getScene(){
 }
 
 async function saveAll(){
+  console.log("🔥 saveAll jalan");
+
   localStorage.setItem("allScenes", JSON.stringify(allScenes));
 
   const scene = getScene();
-
-  const deleteResult = await db
-    .from("dialogs")
-    .delete()
-    .eq("scene", currentScene);
-
-  if(deleteResult.error){
-    console.error("Delete error:", deleteResult.error);
-    return;
-  }
 
   const rows = scene.dialogs.map(function(item){
     return {
@@ -1005,24 +997,44 @@ async function saveAll(){
       character: item.name,
       message: item.text,
       position: item.side,
-      avatar: item.avatar,
+      avatar: item.avatar || "male",
       weather: scene.weather || "☀️ Cerah",
       place: scene.place || "",
       situation: scene.situation || ""
     };
   });
 
-  if(rows.length > 0){
-    const insertResult = await db
-      .from("dialogs")
-      .insert(rows);
+  console.log("Data yang dikirim:", rows);
 
-      if(deleteResult.error){
-  console.error("Delete error:", deleteResult.error);
-  alert("Delete error: " + deleteResult.error.message);
-  return;
-}
+  const deleteResult = await db
+    .from("dialogs")
+    .delete()
+    .eq("scene", currentScene);
+
+  if(deleteResult.error){
+    alert("DELETE ERROR: " + deleteResult.error.message);
+    console.error(deleteResult.error);
+    return;
   }
+
+  if(rows.length === 0){
+    console.log("Tidak ada dialog untuk disimpan");
+    return;
+  }
+
+  const insertResult = await db
+    .from("dialogs")
+    .insert(rows)
+    .select();
+
+  if(insertResult.error){
+    alert("INSERT ERROR: " + insertResult.error.message);
+    console.error(insertResult.error);
+    return;
+  }
+
+  alert("✅ Data berhasil masuk Supabase!");
+  console.log("✅ Insert berhasil:", insertResult.data);
 }
 
 function getAvatar(){
