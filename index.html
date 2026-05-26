@@ -999,8 +999,8 @@ async function saveAll(){
     return;
   }
 
-  for(const item of scene.dialogs){
-    const insertResult = await db.from("dialogs").insert({
+  const rows = scene.dialogs.map(function(item){
+    return {
       scene: currentScene,
       character: item.name,
       message: item.text,
@@ -1009,11 +1009,19 @@ async function saveAll(){
       weather: scene.weather || "☀️ Cerah",
       place: scene.place || "",
       situation: scene.situation || ""
-    });
+    };
+  });
 
-    if(insertResult.error){
-      console.error("Insert error:", insertResult.error);
-    }
+  if(rows.length > 0){
+    const insertResult = await db
+      .from("dialogs")
+      .insert(rows);
+
+      if(deleteResult.error){
+  console.error("Delete error:", deleteResult.error);
+  alert("Delete error: " + deleteResult.error.message);
+  return;
+}
   }
 }
 
