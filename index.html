@@ -1331,7 +1331,7 @@ window.toggleActor = function(index){
   items[index].classList.toggle("open");
 }
 
-addActorBtn.addEventListener("click", function(){
+addActorBtn.addEventListener("click", async function(){
   const name = actorNameInput.value.trim();
   const role = actorRoleInput.value.trim();
   const trait = actorTraitInput.value.trim();
@@ -1462,13 +1462,17 @@ copyActorBtn.addEventListener("click", function(){
 
 });
 
-await loadFromSupabase();
-
-setInterval(async ()=>{
+async function startApp(){
   await loadFromSupabase();
-}, 3000);
+  await loadActorsFromSupabase();
 
-loadActorsFromSupabase();
+  setInterval(async ()=>{
+    await loadFromSupabase();
+    await loadActorsFromSupabase();
+  }, 3000);
+}
+
+startApp();
 </script>
 
 
