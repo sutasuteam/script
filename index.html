@@ -724,20 +724,9 @@ button.danger{background:#e63946}
 </style>
 </head>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script>
-const supabaseUrl = 'https://btagjtzfoyadcnqfgjsg.supabase.co';
 
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ0YWpndHpmb3lhZGNucWZnanNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3NTQ3NzEsImV4cCI6MjA5NTMzMDc3MX0.kD81Imzw3NQ_ZTgj5nRPrKfh7Ong7Zmwt7I7WeyeM5M';
 
-const supabase = window.supabase.createClient(
-  supabaseUrl,
-  supabaseKey
-);
-
-console.log("Supabase connected!");
-</script>
 
 <body>
 
@@ -924,6 +913,16 @@ console.log("Supabase connected!");
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const supabaseUrl = 'https://btagjtzfoyadcnqfgjsg.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ0YWpndHpmb3lhZGNucWZnanNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3NTQ3NzEsImV4cCI6MjA5NTMzMDc3MX0.kD81Imzw3NQ_ZTgj5nRPrKfh7Ong7Zmwt7I7WeyeM5M';
+
+const db = window.supabase.createClient(supabaseUrl, supabaseKey);
+console.log("Supabase connected!");
+</script>
+
 <script>
 const chatArea = document.getElementById("chatArea");
 const sceneSelect = document.getElementById("sceneSelect");
@@ -985,8 +984,28 @@ function getScene(){
   return allScenes[currentScene];
 }
 
-function saveAll(){
-  localStorage.setItem("allScenes",JSON.stringify(allScenes));
+async function saveAll(){
+  localStorage.setItem("allScenes", JSON.stringify(allScenes));
+
+  const scene = getScene();
+
+  await db
+    .from("dialogs")
+    .delete()
+    .eq("scene", currentScene);
+
+  for(const item of scene.dialogs){
+    await db.from("dialogs").insert({
+      scene: currentScene,
+      character: item.name,
+      message: item.text,
+      position: item.side,
+      avatar: item.avatar,
+      weather: scene.weather || "☀️ Cerah",
+      place: scene.place || "",
+      situation: scene.situation || ""
+    });
+  }
 }
 
 function getAvatar(){
@@ -1001,17 +1020,39 @@ function getWeather(){
   return document.querySelector('input[name="weather"]:checked').value;
 }
 
-function loadScene(){
-  const scene=getScene();
+async function loadFromSupabase(){
+  const { data, error } = await db
+    .from("dialogs")
+    .select("*")
+    .order("id", { ascending: true });
 
-placeInput.value=scene.place;
-situationInput.value=scene.situation;
+  if(error){
+    console.log(error);
+    return;
+  }
 
-document.querySelector(
-  `input[name="weather"][value="${scene.weather || "☀️ Cerah"}"]`
-).checked = true;
+  allScenes = {};
 
-renderScript();
+  data.forEach(function(row){
+    if(!allScenes[row.scene]){
+      allScenes[row.scene] = {
+        place: row.place || "",
+        situation: row.situation || "",
+        weather: row.weather || "☀️ Cerah",
+        dialogs: []
+      };
+    }
+
+    allScenes[row.scene].dialogs.push({
+      name: row.character,
+      text: row.message,
+      side: row.position,
+      avatar: row.avatar
+    });
+  });
+
+  localStorage.setItem("allScenes", JSON.stringify(allScenes));
+  loadScene();
 }
 
 function renderScript(){
@@ -1325,8 +1366,11 @@ copyActorBtn.addEventListener("click", function(){
 
 });
 
-loadScene();
+loadFromSupabase();
 </script>
+
+
+
 
 </body>
 </html>
