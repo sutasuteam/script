@@ -714,12 +714,199 @@ button.danger{background:#e63946}
   font-weight:bold;
 }
 
+.title-bar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+}
+
+.title-actions{
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  gap:12px;
+}
+
+.copy-btn,
+.logout-btn{
+  border:none;
+  border-radius:12px;
+  padding:14px 20px;
+  font-size:16px;
+  font-weight:700;
+  cursor:pointer;
+  width:auto;
+  white-space:nowrap;
+}
+
+.copy-btn{
+  background:black;
+  color:white;
+}
+
+.logout-btn{
+  background:#e63946;
+  color:white;
+}
+
 @media(max-width:900px){
   .container{grid-template-columns:1fr;width:95%;padding:20px}
   .tools-grid{grid-template-columns:1fr}
   .title-bar{flex-direction:column;align-items:flex-start}
   .title-bar h1{font-size:28px}
   .dialog-row{max-width:90%}
+}
+
+@media(max-width:768px){
+
+body{
+  background:#111;
+}
+
+.container{
+  width:100%;
+  margin:0;
+  padding:12px;
+  grid-template-columns:1fr;
+  gap:16px;
+  border-radius:0;
+}
+
+.script-box{
+  padding:14px;
+  border-radius:14px;
+}
+
+.right-column{
+  order:2;
+  gap:16px;
+}
+
+.script-box{
+  order:1;
+}
+
+.title-bar{
+  flex-direction:column;
+  align-items:flex-start;
+  gap:12px;
+}
+
+.movie-title,
+.title-bar h1{
+  font-size:24px!important;
+  line-height:1.2;
+}
+
+.title-actions{
+  width:100%;
+  display:flex;
+  flex-direction:row;
+  gap:8px;
+}
+
+.copy-btn,
+.logout-btn{
+  flex:1;
+  font-size:12px;
+  padding:12px 10px;
+}
+
+.chat-area{
+  min-height:420px!important;
+  height:420px!important;
+  max-height:420px!important;
+  padding:14px;
+  border-radius:20px;
+  background-size:900px;
+  gap:16px;
+  overflow-y:auto!important;
+}
+
+.scene-header{
+  padding:16px;
+  border-radius:18px;
+}
+
+.scene-title{
+  font-size:20px!important;
+}
+
+.scene-place,
+.scene-situation,
+.scene-weather{
+  font-size:14px!important;
+}
+
+.dialog-row{
+  max-width:92%!important;
+  padding:14px;
+  border-radius:18px;
+}
+
+.character{
+  font-size:16px;
+}
+
+.character-icon{
+  width:36px;
+  height:36px;
+}
+
+.bubble{
+  font-size:16px;
+  line-height:1.6;
+}
+
+.tools-grid{
+  grid-template-columns:1fr;
+  gap:14px;
+}
+
+.scene-tools,
+.dialog-tools,
+.sidebar,
+.actor-table-box,
+.actor-form-box{
+  padding:16px;
+  border-radius:16px;
+}
+
+.sidebar h2,
+.actor-table-box h2,
+.actor-form-box h2,
+.scene-tools h3,
+.dialog-tools h3{
+  font-size:20px;
+}
+
+.sidebar p{
+  font-size:14px;
+  line-height:1.5;
+}
+
+input,
+textarea,
+select,
+button{
+  font-size:14px;
+}
+
+.actor-main{
+  align-items:flex-start;
+}
+
+.actor-buttons{
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+.actor-buttons button{
+  font-size:11px;
+  padding:6px 7px!important;
+}
+
 }
 </style>
 </head>
@@ -757,8 +944,21 @@ button.danger{background:#e63946}
   <div class="script-box">
 
     <div class="title-bar">
-      <h1>🎬 Susah Untuk Bilang Cinta</h1>
-      <button id="copyBtn" class="copy-btn">📋 Salin Semua Script</button>
+
+      <h1 class="movie-title">
+        🎬 Susah Untuk Bilang Cinta
+      </h1>
+    
+      <div class="title-actions">
+        <button id="copyBtn" class="copy-btn">
+          📋 Salin Semua Script
+        </button>
+    
+        <button id="logoutBtn" class="logout-btn">
+          🚪 Logout
+        </button>
+      </div>
+    
     </div>
 
     <div id="chatArea" class="chat-area"></div>
@@ -940,6 +1140,18 @@ const addBtn = document.getElementById("addBtn");
 const clearBtn = document.getElementById("clearBtn");
 const copyBtn = document.getElementById("copyBtn");
 
+
+const logoutBtn = document.getElementById("logoutBtn");
+
+
+
+logoutBtn.addEventListener("click", function(){
+  localStorage.removeItem("isLogin");
+  loginPass.value = "";
+  app.style.display = "none";
+  loginPage.style.display = "flex";
+});
+
 const loginPage = document.getElementById("loginPage");
 const app = document.getElementById("app");
 
@@ -949,13 +1161,20 @@ const loginError = document.getElementById("loginError");
 
 const PASSWORD = "314464";
 
+if(localStorage.getItem("isLogin") === "true"){
+
+loginPage.style.display = "none";
+app.style.display = "block";
+
+}
+
 
 
 loginBtn.addEventListener("click", function(){
 
   if(loginPass.value === PASSWORD){
 
-    sessionStorage.setItem("isLogin", "true");
+    localStorage.setItem("isLogin", "true");
 
     loginPage.style.display = "none";
     app.style.display = "block";
@@ -1240,6 +1459,7 @@ const actorRoleInput = document.getElementById("actorRoleInput");
 const actorTraitInput = document.getElementById("actorTraitInput");
 const addActorBtn = document.getElementById("addActorBtn");
 const actorTableBody = document.getElementById("actorTableBody");
+
 
 let actors = JSON.parse(localStorage.getItem("actors")) || [];
 let editActorIndex = null;
