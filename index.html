@@ -1244,8 +1244,49 @@ const actorTableBody = document.getElementById("actorTableBody");
 let actors = JSON.parse(localStorage.getItem("actors")) || [];
 let editActorIndex = null;
 
-function saveActors(){
-  localStorage.setItem("actors", JSON.stringify(actors));
+async function loadActorsFromSupabase(){
+
+const { data, error } = await db
+  .from("actors")
+  .select("*")
+  .order("id", { ascending:true });
+
+if(error){
+  console.log(error);
+  return;
+}
+
+actors = data || [];
+
+renderActors();
+}
+
+async function saveActors(){
+
+localStorage.setItem("actors", JSON.stringify(actors));
+
+const deleteResult = await db
+  .from("actors")
+  .delete()
+  .neq("id", 0);
+
+if(deleteResult.error){
+  console.log(deleteResult.error);
+  return;
+}
+
+if(actors.length > 0){
+
+  const insertResult = await db
+    .from("actors")
+    .insert(actors);
+
+  if(insertResult.error){
+    console.log(insertResult.error);
+  }
+
+}
+
 }
 
 function renderActors(){
@@ -1426,6 +1467,8 @@ await loadFromSupabase();
 setInterval(async ()=>{
   await loadFromSupabase();
 }, 3000);
+
+loadActorsFromSupabase();
 </script>
 
 
