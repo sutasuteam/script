@@ -1145,17 +1145,25 @@ sceneSelect.addEventListener("change",function(){
   loadScene();
 });
 
-saveSceneBtn.addEventListener("click",function(){
-  const scene=getScene();
-  scene.place=placeInput.value.trim();
-  scene.situation=situationInput.value.trim();
-  scene.weather = getWeather();
+saveSceneBtn.addEventListener("click", async function(){
 
-  saveAll();
-  renderScript();
+const scene=getScene();
 
-  saveSceneBtn.innerText="✅ Scene Tersimpan!";
-  setTimeout(()=>saveSceneBtn.innerText="Simpan Scene",1500);
+scene.place=placeInput.value.trim();
+scene.situation=situationInput.value.trim();
+scene.weather=getWeather();
+
+await saveAll();
+await loadFromSupabase();
+
+renderScript();
+
+saveSceneBtn.innerText="✅ Scene Tersimpan!";
+
+setTimeout(()=>{
+  saveSceneBtn.innerText="Simpan Scene";
+},1500);
+
 });
 
 deleteSceneBtn.addEventListener("click",function(){
@@ -1413,7 +1421,11 @@ copyActorBtn.addEventListener("click", function(){
 
 });
 
-loadFromSupabase();
+await loadFromSupabase();
+
+setInterval(async ()=>{
+  await loadFromSupabase();
+}, 3000);
 </script>
 
 
