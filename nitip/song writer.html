@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Song Writer Page</title>
+
+  <!-- GOOGLE FONT -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="shortcut icon" href="song.png" type="image/x-icon">
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Poppins', sans-serif;
+    }
+
+    body{
+      background:url('https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat;
+      min-height:100vh;
+      position:relative;
+    }
+
+    body::before{
+      content:'';
+      position:absolute;
+      inset:0;
+      background:rgba(0,0,0,0.55);
+      backdrop-filter:blur(2px);
+    }
+
+    /* MAIN CONTAINER */
+    .container{
+      width:90%;
+      max-width:1400px;
+      margin:auto;
+      position:relative;
+      z-index:2;
+      padding-top:50px;
+      padding-bottom:50px;
+    }
+
+    /* TITLE */
+    .title{
+      text-align:center;
+      font-size:55px;
+      font-weight:700;
+      color:#fff;
+      margin-bottom:40px;
+      text-shadow:5px 5px 0 #000;
+    }
+
+    .title span{
+      color:#00d26a;
+    }
+
+    /* WHITE PAPER */
+    .paper{
+      background:#f5f5f5;
+      border-radius:8px;
+      min-height:750px;
+      padding:40px;
+      display:flex;
+      gap:30px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.4);
+    }
+
+    /* LEFT SIDE */
+    .left{
+      flex:1;
+      background:white;
+      border-radius:10px;
+      padding:30px;
+      box-shadow:0 5px 20px rgba(0,0,0,0.08);
+    }
+
+    .left h2{
+      font-size:40px;
+      margin-bottom:25px;
+      color:#111;
+    }
+
+    /* TEXT AREA */
+    .lyrics-box{
+      width:100%;
+      min-height:550px;
+      border:none;
+      outline:none;
+      resize:none;
+      font-size:18px;
+      line-height:1.8;
+      background:transparent;
+      color:#222;
+    }
+
+    .lyrics-box::placeholder{
+      color:#999;
+    }
+
+    /* RIGHT SIDE */
+    .right{
+      width:350px;
+      display:flex;
+      flex-direction:column;
+      gap:20px;
+    }
+
+    .card{
+      background:#000;
+      color:#fff;
+      padding:25px;
+    }
+
+    .card h3{
+      font-size:32px;
+      margin-bottom:15px;
+      text-transform:uppercase;
+    }
+
+    .card p{
+      line-height:1.8;
+      font-size:15px;
+      color:#ddd;
+    }
+
+    .song-list{
+      background:white;
+      padding:25px;
+    }
+
+    .song-list h3{
+      font-size:35px;
+      margin-bottom:20px;
+    }
+
+    .song-item{
+      padding:15px 0;
+      border-bottom:1px solid #ddd;
+    }
+
+    .song-item:last-child{
+      border-bottom:none;
+    }
+
+    .song-item h4{
+      font-size:22px;
+      margin-bottom:5px;
+    }
+
+    .song-item span{
+      color:#666;
+      font-size:14px;
+    }
+
+    /* RESPONSIVE */
+    @media(max-width:1000px){
+      .paper{
+        flex-direction:column;
+      }
+
+      .right{
+        width:100%;
+      }
+
+      .title{
+        font-size:40px;
+      }
+    }
+
+    @media(max-width:600px){
+      .paper{
+        padding:20px;
+      }
+
+      .left{
+        padding:20px;
+      }
+
+      .left h2{
+        font-size:28px;
+      }
+
+      .lyrics-box{
+        font-size:16px;
+      }
+    }
+
+  </style>
+</head>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const lyricsBox = document.querySelector(".lyrics-box");
+  
+      if (!lyricsBox) {
+        console.log("Textarea .lyrics-box tidak ditemukan");
+        return;
+      }
+  
+      // tampilkan tulisan yang sudah tersimpan
+      lyricsBox.value = localStorage.getItem("savedLyrics") || "";
+  
+      // simpan setiap kali mengetik
+      lyricsBox.addEventListener("input", function () {
+        localStorage.setItem("savedLyrics", lyricsBox.value);
+      });
+    });
+  </script>
+<body>
+
+  <div class="container">
+
+    <h1 class="title"><span>PRASETIYO</span>ADY</h1>
+
+    <div class="paper">
+
+      <!-- LEFT -->
+      <div class="left">
+
+        <h2>🎵 Write Your Song</h2>
+
+        <textarea class="lyrics-box" placeholder="Write your lyrics here..."></textarea>
+
+      </div>
+
+      <!-- RIGHT -->
+      <div class="right">
+
+        <div class="card">
+          <h3>Introduction</h3>
+
+          <p>
+            This page can be used to write songs, lyrics, poetry,
+            ideas, or anything creative.  
+            You can customize this section later with your own text.
+          </p>
+        </div>
+
+        <div class="music-player">
+          <h2>Music Demo</h2>
+        
+          <p id="songTitle">Now playing: Demo.mp3</p>
+        
+          <audio id="audioPlayer" controls>
+            <source src="demo music/" type="audio/mpeg">
+            Browser kamu tidak mendukung audio.
+          </audio>
+        </div>
+
+        <div class="song-list">
+
+          <h3>Top Songs</h3>
+
+          <div class="song-item">
+            <h4>1. Night Sky</h4>
+            <span>Pop • Chill • Emotional</span>
+          </div>
+
+          <div class="song-item">
+            <h4>2. Lost Memories</h4>
+            <span>Sad • Piano • Slow</span>
+          </div>
+
+          <div class="song-item">
+            <h4>3. Fire Inside</h4>
+            <span>Rock • Energetic</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    const lyricsBox = document.querySelector(".lyrics-box");
+
+    // Load text lama
+    lyricsBox.value = localStorage.getItem("savedLyrics") || "";
+
+    // Auto save
+    lyricsBox.addEventListener("input", () => {
+      localStorage.setItem("savedLyrics", lyricsBox.value);
+    });
+  </script>
+
+</body>
+</html>

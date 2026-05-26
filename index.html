@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Film Script</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{margin:0;font-family:Arial,sans-serif;background:#111}
+
+.container{
+  width:90%;
+  margin:30px auto;
+  background:#eee;
+  padding:30px;
+  display:grid;
+  grid-template-columns:1fr 350px;
+  gap:30px;
+  border-radius:12px;
+}
+
+.login-page{
+  position:fixed;
+  inset:0;
+
+  background:#111;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  z-index:9999;
+}
+
+.login-box{
+  width:360px;
+
+  background:white;
+
+  padding:30px;
+
+  border-radius:18px;
+
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.login-box h2{
+  margin:0;
+  font-size:28px;
+}
+
+#loginError{
+  color:red;
+  font-weight:bold;
+}
+
+.script-box,.sidebar{
+  border-radius:12px;
+}
+
+.script-box{
+  background:white;
+  padding:30px;
+}
+
+.sidebar{
+  background:black;
+  color:white;
+  padding:30px;
+  height:fit-content;
+}
+
+.title-bar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+  margin-bottom:25px;
+}
+
+.title-bar h1{margin:0;font-size:36px}
+
+.chat-area{
+  height:500px !important;
+  max-height:500px !important;
+  min-height:650px !important;
+
+  overflow-y:scroll !important;
+  overflow-x:hidden !important;
+  overflow-y:auto !important;
+
+  display:flex;
+  flex-direction:column;
+  gap:25px;
+
+  width:100%;
+
+
+
+border-radius:28px;
+padding:25px;
+
+background-image:url("background/meow-meow-coy_MhYMLHs-unsplash.jpg");
+
+background-size:1700px;
+background-repeat:repeat;
+background-position:center;
+
+display:flex;
+flex-direction:column;
+gap:25px;
+
+overflow:visible;
+
+margin-bottom:20px;
+}
+
+.chat-area::-webkit-scrollbar{
+  width:10px;
+}
+
+.chat-area::-webkit-scrollbar-track{
+  background:rgba(0,0,0,0.25);
+  border-radius:20px;
+}
+
+.chat-area::-webkit-scrollbar-thumb{
+  background:rgba(255, 255, 255, 0.45);
+  border-radius:20px;
+}
+
+.chat-area{
+  clip-path: inset(0 round 30px);
+}
+
+
+
+.dialog-row{
+  width:100%;
+  max-width:55%;
+  flex-shrink:0;
+}
+
+.chat-area > *{
+  flex-shrink:0;
+}
+
+.scene-header{
+  position:relative;
+
+  background:rgba(10,10,10,0.72);
+
+  backdrop-filter:blur(8px);
+
+  border:1px solid rgba(255,255,255,0.08);
+
+  border-left:5px solid #cfcfcf;
+
+  box-shadow:
+    0 8px 30px rgba(0,0,0,0.35),
+    inset 0 1px 0 rgba(255,255,255,0.04);
+
+  color:white;
+
+  padding:22px 24px;
+
+  border-radius:24px;
+
+  overflow:hidden;
+}
+
+.scene-header::before{
+  content:"";
+
+  position:absolute;
+  inset:0;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,0.06),
+      transparent 40%
+    );
+
+  pointer-events:none;
+}
+
+.scene-title{
+  font-size:34px;
+  font-weight:900;
+  letter-spacing:1px;
+
+  margin-bottom:18px;
+
+  color:#ffffff;
+
+  text-shadow:
+    0 2px 10px rgba(0,0,0,0.45);
+}
+
+.scene-place,
+.scene-situation,
+.scene-weather{
+  display:flex;
+  align-items:center;
+
+  gap:10px;
+
+  font-size:18px;
+
+  margin-bottom:10px;
+
+  color:#f1f1f1;
+
+  text-shadow:
+    0 2px 8px rgba(0,0,0,0.4);
+}
+
+.scene-place{
+  color:#ffd6d6;
+}
+
+.scene-situation{
+  color:#d7f0ff;
+}
+
+.scene-weather{
+  color:#fff2b0;
+  margin-bottom:0;
+}
+
+.scene-title{
+  font-size:22px;
+  font-weight:bold;
+  margin-bottom:10px;
+}
+
+.scene-place{
+  font-size:18px;
+  font-weight:bold;
+  margin-bottom:8px;
+}
+
+.scene-situation{
+  font-size:16px;
+  line-height:1.6;
+}
+
+.dialog-row{max-width:55%}
+
+.dialog-row.right{
+  align-self:flex-end;
+  text-align:right;
+}
+
+.tools-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+  align-items:stretch;
+}
+
+.scene-tools,
+.dialog-tools{
+  background:#f7f7f7;
+  padding:18px;
+  border-radius:16px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.scene-tools textarea,
+.dialog-tools textarea{
+  min-height:150px;
+}
+
+.scene-tools .scene-btn,
+.dialog-tools #addBtn{
+  margin-top:auto;
+}
+
+
+
+.dialog-row{
+  position:relative;
+
+  width:100%;
+  max-width:62%;
+
+  padding:16px 18px;
+
+  border-radius:26px;
+
+  background:
+    rgba(20,20,20,0.48);
+
+  backdrop-filter:blur(10px);
+
+  border:
+    1px solid rgba(255,255,255,0.08);
+
+  box-shadow:
+    0 10px 35px rgba(0,0,0,0.28);
+
+  overflow:hidden;
+}
+
+.dialog-row::before{
+  content:"";
+
+  position:absolute;
+  inset:0;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.08),
+      transparent 45%
+    );
+
+  pointer-events:none;
+}
+
+.dialog-row.left{
+  align-self:flex-start;
+}
+
+.dialog-row.right{
+  align-self:flex-end;
+}
+
+.character{
+  display:flex;
+  align-items:center;
+  gap:12px;
+
+  margin-bottom:14px;
+
+  font-weight:bold;
+
+  color:white;
+
+  font-size:22px;
+
+  text-shadow:
+    0 2px 8px rgba(0,0,0,0.5);
+}
+
+.dialog-row.right .character{
+  justify-content:flex-end;
+}
+
+.character-icon{
+  width:46px;
+  height:46px;
+
+  border-radius:50%;
+
+  border:2px solid rgba(255,255,255,0.25);
+
+  object-fit:cover;
+
+  box-shadow:
+    0 4px 12px rgba(0,0,0,0.35);
+}
+
+.bubble{
+  color:#f5f5f5;
+
+  font-size:24px;
+
+  line-height:1.8;
+
+  white-space:pre-wrap;
+
+  text-shadow:
+    0 2px 8px rgba(0,0,0,0.45);
+}
+
+.dialog-actions{
+  margin-top:16px;
+
+  display:flex;
+  gap:10px;
+}
+
+.dialog-row.right .dialog-actions{
+  justify-content:flex-end;
+}
+
+.dialog-actions button{
+  width:38px!important;
+  height:38px!important;
+
+  border-radius:50%;
+
+  background:
+    rgba(255,255,255,0.12)!important;
+
+  backdrop-filter:blur(5px);
+
+  border:
+    1px solid rgba(255,255,255,0.08);
+
+  color:white!important;
+
+  transition:.2s;
+}
+
+.dialog-actions button:hover{
+  transform:translateY(-2px);
+  background:rgba(255,255,255,0.2)!important;
+}
+
+.tools-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
+
+.scene-tools,.dialog-tools{
+  background:#f7f7f7;
+  padding:18px;
+  border-radius:16px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+input,textarea,select{
+  width:100%;
+  padding:14px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  font-size:15px;
+}
+
+textarea{
+  min-height:120px;
+  resize:vertical;
+}
+
+.weather-picker{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+}
+
+.weather-picker label{
+  cursor:pointer;
+}
+
+.weather-picker input{
+  display:none;
+}
+
+.scene-weather{
+  margin-top:10px;
+  font-size:18px;
+  font-weight:bold;
+}
+
+.weather-card{
+  width:50px;
+  height:50px;
+
+  background:white;
+
+  border:3px solid transparent;
+  border-radius:25px;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+
+  gap:6px;
+
+  font-size:14px;
+  transition:.2s;
+}
+
+.weather-card span{
+  font-size:10px;
+  font-weight:bold;
+}
+
+.weather-picker input:checked + .weather-card{
+  border-color:#00d084;
+  transform:translateY(-3px);
+}
+
+button{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:bold;
+  color:white;
+  background:#111;
+}
+
+button.danger{background:#e63946}
+
+.copy-btn,.scene-btn{
+  background:#111;
+}
+
+.copy-btn{
+  width:auto!important;
+  padding:12px 18px;
+}
+
+.icon-picker{
+  display:flex;
+  gap:14px;
+}
+
+.icon-picker input{display:none}
+
+.icon-picker img{
+  width:52px;
+  height:52px;
+  border-radius:50%;
+  border:3px solid transparent;
+  cursor:pointer;
+}
+
+.icon-picker input:checked + img{
+  border-color:#00d084;
+}
+
+.dialog-actions{
+  display:flex;
+  gap:8px;
+  margin-top:12px;
+}
+
+.dialog-row.right .dialog-actions{
+  justify-content:flex-end;
+}
+
+.dialog-actions button{
+  width:34px!important;
+  height:34px!important;
+  border-radius:50%;
+  background:#f1f1f1;
+  color:#222;
+  padding:0;
+}
+
+.character-tools{
+  margin-top:25px;
+  background:white;
+  color:#111;
+  padding:18px;
+  border-radius:14px;
+}
+
+.character-tools h2{
+  margin-top:0;
+}
+.actor-mini-section{
+  margin-top:25px;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+
+
+
+.actor-name{
+  font-size:18px;
+  font-weight:bold;
+}
+
+.right-column{
+  display:flex;
+  flex-direction:column;
+  gap:25px;
+}
+
+.sidebar{
+  background:black;
+  color:white;
+  padding:30px;
+  border-radius:12px;
+  height:auto;
+}
+
+.actor-mini-section{
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+  margin-top:0;
+}
+
+.actor-table-box,
+.actor-form-box{
+  background:white;
+  color:#111;
+  padding:18px;
+  border-radius:12px;
+}
+
+.actor-form-box{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.actor-form-box input{
+  margin:0;
+}
+
+.actor-form-box textarea{
+  margin:0;
+}
+
+.actor-item{
+  border-bottom:1px solid #ddd;
+  padding:10px 0;
+}
+
+.actor-main{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.actor-name{
+  font-size:18px;
+  font-weight:bold;
+}
+
+.actor-buttons{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.actor-buttons button{
+  width:auto!important;
+  height:auto!important;
+  padding:6px 8px!important;
+
+  border-radius:8px;
+
+  background:#f2f2f2!important;
+  color:#111!important;
+
+  border:1px solid #ddd;
+
+  font-size:13px;
+  cursor:pointer;
+}
+
+.actor-buttons button:hover{
+  background:#e5e5e5!important;
+  transform:translateY(-1px);
+}
+.actor-trait{
+  display:none;
+  margin-top:8px;
+  color:#333;
+  font-size:15px;
+  line-height:1.5;
+}
+
+.actor-role{
+  display:none;
+  margin-top:8px;
+  color:#111;
+  font-size:15px;
+  line-height:1.5;
+  font-weight:bold;
+}
+
+.actor-item.open .actor-trait,
+.actor-item.open .actor-role{
+  display:block;
+}
+
+.actor-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin-bottom:15px;
+}
+
+.actor-header h2{
+  margin:0!important;
+  flex:1;
+}
+
+.copy-actor-btn{
+  width:auto!important;
+  padding:10px 16px;
+  background:#111;
+  color:white;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+@media(max-width:900px){
+  .container{grid-template-columns:1fr;width:95%;padding:20px}
+  .tools-grid{grid-template-columns:1fr}
+  .title-bar{flex-direction:column;align-items:flex-start}
+  .title-bar h1{font-size:28px}
+  .dialog-row{max-width:90%}
+}
+</style>
+</head>
+
+<body>
+
+  <div id="loginPage" class="login-page">
+  
+    <div class="login-box">
+  
+      <h2>🔒 Password</h2>
+  
+      <input
+        id="loginPass"
+        type="password"
+        placeholder="Masukkan password"
+      >
+  
+      <button id="loginBtn">Masuk</button>
+  
+      <p id="loginError"></p>
+  
+    </div>
+  
+  </div>
+  
+  <div id="app" style="display:none;">
+
+<div class="container">
+
+  <div class="script-box">
+
+    <div class="title-bar">
+      <h1>🎬 Susah Untuk Bilang Cinta</h1>
+      <button id="copyBtn" class="copy-btn">📋 Salin Semua Script</button>
+    </div>
+
+    <div id="chatArea" class="chat-area"></div>
+
+    <div class="tools-grid">
+
+      <div class="scene-tools">
+        <h3>Scene Tools</h3>
+
+        <select id="sceneSelect"></select>
+
+        <input id="placeInput" type="text" placeholder="Tempat: contoh Rumah Karina">
+
+        <textarea id="situationInput" placeholder="Situasi/Kondisi..."></textarea>
+
+       
+
+<div class="weather-picker">
+
+  <label>
+    <input type="radio" name="weather" value="☀️ Cerah" checked>
+    <div class="weather-card">
+      ☀️
+      <span>Cerah</span>
+    </div>
+  </label>
+
+  <label>
+    <input type="radio" name="weather" value="🌧️ Hujan">
+    <div class="weather-card">
+      🌧️
+      <span>Hujan</span>
+    </div>
+  </label>
+
+  <label>
+    <input type="radio" name="weather" value="⛈️ Badai">
+    <div class="weather-card">
+      ⛈️
+      <span>Badai</span>
+    </div>
+  </label>
+
+  <label>
+    <input type="radio" name="weather" value="🌙 Malam">
+    <div class="weather-card">
+      🌙
+      <span>Malam</span>
+    </div>
+  </label>
+
+  <label>
+    <input type="radio" name="weather" value="❄️ Salju">
+    <div class="weather-card">
+      ❄️
+      <span>Salju</span>
+    </div>
+  </label>
+
+  <label>
+    <input type="radio" name="weather" value="🌫️ Kabut">
+    <div class="weather-card">
+      🌫️
+      <span>Kabut</span>
+    </div>
+  </label>
+
+</div>
+
+        <button id="saveSceneBtn" class="scene-btn">Simpan Scene</button>
+
+        <button id="deleteSceneBtn" class="danger">Hapus Scene Ini</button>
+      </div>
+
+      <div class="dialog-tools">
+        <h3>Dialog Tools</h3>
+
+        <input id="nameInput" type="text" placeholder="Nama karakter">
+
+        <div class="icon-picker">
+          <label>
+            <input type="radio" name="avatar" value="male" checked>
+            <img src="ico/male.png" alt="Male">
+          </label>
+
+          <label>
+            <input type="radio" name="avatar" value="female">
+            <img src="ico/female.png" alt="Female">
+          </label>
+        </div>
+
+        <textarea id="dialogInput" placeholder="Tulis dialog..."></textarea>
+
+        <select id="sideInput">
+          <option value="left">Kiri</option>
+          <option value="right">Kanan</option>
+        </select>
+
+        <button id="addBtn">Tambah Dialog</button>
+        <button id="clearBtn" class="danger">Hapus Semua Dialog</button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="right-column">
+
+    <div class="sidebar">
+      <h2>INTRODUCTION</h2>
+      <p>
+        Halaman ini digunakan untuk menulis naskah film dalam bentuk dialog visual.
+      </p>
+    </div>
+  
+    <div class="actor-mini-section">
+  
+      <div class="actor-table-box">
+        <div class="actor-header">
+
+          <h2>✨ PEMAIN</h2>
+        
+          <button id="copyActorBtn" class="copy-actor-btn">
+            📋 Salin
+          </button>
+        
+        </div>
+        <div id="actorTableBody" class="actor-list-style"></div>
+      </div>
+  
+      <div class="actor-form-box">
+        <h2>✨ TAMBAH TOKOH</h2>
+  
+        <input id="actorNameInput" type="text" placeholder="Nama tokoh">
+
+        <input id="actorRoleInput" type="text" placeholder="Peran tokoh: contoh Protagonis, Antagonis, Sahabat">
+  
+        <textarea id="actorTraitInput" placeholder="Watak tokoh..."></textarea>
+  
+        <button id="addActorBtn">Tambah Tokoh</button>
+      </div>
+  
+    </div>
+  
+  </div>
+
+  
+  
+</div> <!-- penutup container utama -->
+
+
+
+</div>
+
+<script>
+const chatArea = document.getElementById("chatArea");
+const sceneSelect = document.getElementById("sceneSelect");
+const placeInput = document.getElementById("placeInput");
+const situationInput = document.getElementById("situationInput");
+const saveSceneBtn = document.getElementById("saveSceneBtn");
+const deleteSceneBtn = document.getElementById("deleteSceneBtn");
+
+const nameInput = document.getElementById("nameInput");
+const dialogInput = document.getElementById("dialogInput");
+const sideInput = document.getElementById("sideInput");
+const addBtn = document.getElementById("addBtn");
+const clearBtn = document.getElementById("clearBtn");
+const copyBtn = document.getElementById("copyBtn");
+
+const loginPage = document.getElementById("loginPage");
+const app = document.getElementById("app");
+
+const loginPass = document.getElementById("loginPass");
+const loginBtn = document.getElementById("loginBtn");
+const loginError = document.getElementById("loginError");
+
+const PASSWORD = "314464";
+
+
+
+loginBtn.addEventListener("click", function(){
+
+  if(loginPass.value === PASSWORD){
+
+    sessionStorage.setItem("isLogin", "true");
+
+    loginPage.style.display = "none";
+    app.style.display = "block";
+
+  }else{
+
+    loginError.innerText = "Password salah!";
+
+  }
+
+});
+
+for(let i=1;i<=40;i++){
+  const option=document.createElement("option");
+  option.value=i;
+  option.textContent="Scene "+i;
+  sceneSelect.appendChild(option);
+}
+
+let allScenes=JSON.parse(localStorage.getItem("allScenes"))||{};
+let currentScene="1";
+let editIndex=null;
+
+function getScene(){
+  if(!allScenes[currentScene]){
+    allScenes[currentScene]={place:"",situation:"",dialogs:[]};
+  }
+  return allScenes[currentScene];
+}
+
+function saveAll(){
+  localStorage.setItem("allScenes",JSON.stringify(allScenes));
+}
+
+function getAvatar(){
+  return document.querySelector('input[name="avatar"]:checked').value;
+}
+
+function avatarSrc(avatar){
+  return avatar==="female" ? "ico/female.png" : "ico/male.png";
+}
+
+function getWeather(){
+  return document.querySelector('input[name="weather"]:checked').value;
+}
+
+function loadScene(){
+  const scene=getScene();
+
+placeInput.value=scene.place;
+situationInput.value=scene.situation;
+
+document.querySelector(
+  `input[name="weather"][value="${scene.weather || "☀️ Cerah"}"]`
+).checked = true;
+
+renderScript();
+}
+
+function renderScript(){
+  const scene=getScene();
+  chatArea.innerHTML="";
+
+  const sceneHeader=document.createElement("div");
+  sceneHeader.className="scene-header";
+  sceneHeader.innerHTML=`
+  <div class="scene-title">SCENE ${currentScene}</div>
+  <div class="scene-place">📍 ${scene.place || "Tanpa Tempat"}</div>
+  <div class="scene-situation">🎭 ${scene.situation || "Tanpa Situasi"}</div>
+  <div class="scene-weather">${scene.weather || "☀️ Cerah"}</div>
+`;
+  chatArea.appendChild(sceneHeader);
+
+  scene.dialogs.forEach(function(item,index){
+    const row=document.createElement("div");
+    row.className="dialog-row "+item.side;
+
+    row.innerHTML=`
+      <div class="character">
+        <img class="character-icon" src="${avatarSrc(item.avatar)}">
+        <span>${item.name}</span>
+      </div>
+
+      <div class="bubble">${item.text}</div>
+
+      <div class="dialog-actions">
+        <button onclick="editDialog(${index})">✏️</button>
+        <button onclick="deleteDialog(${index})">🗑️</button>
+      </div>
+    `;
+
+    chatArea.appendChild(row);
+  });
+}
+
+sceneSelect.addEventListener("change",function(){
+  currentScene=sceneSelect.value;
+  editIndex=null;
+  addBtn.innerText="Tambah Dialog";
+  loadScene();
+});
+
+saveSceneBtn.addEventListener("click",function(){
+  const scene=getScene();
+  scene.place=placeInput.value.trim();
+  scene.situation=situationInput.value.trim();
+  scene.weather = getWeather();
+
+  saveAll();
+  renderScript();
+
+  saveSceneBtn.innerText="✅ Scene Tersimpan!";
+  setTimeout(()=>saveSceneBtn.innerText="Simpan Scene",1500);
+});
+
+deleteSceneBtn.addEventListener("click",function(){
+  if(confirm("Yakin ingin menghapus Scene "+currentScene+"?")){
+    delete allScenes[currentScene];
+    saveAll();
+
+    placeInput.value="";
+    situationInput.value="";
+    editIndex=null;
+
+    loadScene();
+  }
+});
+
+addBtn.addEventListener("click",function(){
+  const name=nameInput.value.trim();
+  const text=dialogInput.value.trim();
+  const side=sideInput.value;
+  const avatar=getAvatar();
+  const scene=getScene();
+
+  if(name===""||text===""){
+    alert("Nama dan dialog harus diisi!");
+    return;
+  }
+
+  if(editIndex===null){
+    scene.dialogs.push({name,text,side,avatar});
+  }else{
+    scene.dialogs[editIndex]={name,text,side,avatar};
+    editIndex=null;
+    addBtn.innerText="Tambah Dialog";
+  }
+
+  saveAll();
+  renderScript();
+
+  nameInput.value="";
+  dialogInput.value="";
+});
+
+window.editDialog=function(index){
+  const scene=getScene();
+  const item=scene.dialogs[index];
+
+  nameInput.value=item.name;
+  dialogInput.value=item.text;
+  sideInput.value=item.side;
+
+  document.querySelector(`input[name="avatar"][value="${item.avatar || "male"}"]`).checked=true;
+
+  editIndex=index;
+  addBtn.innerText="Simpan Edit";
+}
+
+window.deleteDialog=function(index){
+  const scene=getScene();
+  scene.dialogs.splice(index,1);
+  saveAll();
+  renderScript();
+}
+
+clearBtn.addEventListener("click",function(){
+  const scene=getScene();
+  scene.dialogs=[];
+  editIndex=null;
+  saveAll();
+  renderScript();
+});
+
+const actorNameInput = document.getElementById("actorNameInput");
+const actorRoleInput = document.getElementById("actorRoleInput");
+const actorTraitInput = document.getElementById("actorTraitInput");
+const addActorBtn = document.getElementById("addActorBtn");
+const actorTableBody = document.getElementById("actorTableBody");
+
+let actors = JSON.parse(localStorage.getItem("actors")) || [];
+let editActorIndex = null;
+
+function saveActors(){
+  localStorage.setItem("actors", JSON.stringify(actors));
+}
+
+function renderActors(){
+  actorTableBody.innerHTML = "";
+
+  actors.forEach(function(actor, index){
+
+    const item = document.createElement("div");
+    item.className = "actor-item";
+
+    item.innerHTML = `
+      <div class="actor-main">
+
+        <div class="actor-left">
+          <div class="actor-name">
+            ${index + 1}. ${actor.name}
+          </div>
+        </div>
+
+<div class="actor-buttons">
+  <button onclick="toggleActor(${index})">Detail</button>
+  <button onclick="editActor(${index})">Edit</button>
+  <button onclick="deleteActor(${index})">Hapus</button>
+</div>
+
+      </div>
+
+      <div class="actor-role">
+        Peran: ${actor.role || "Belum diisi"}
+      </div>
+
+      <div class="actor-trait">
+        Watak: ${actor.trait}
+      </div>
+    `;
+
+    actorTableBody.appendChild(item);
+  });
+}
+window.toggleActor = function(index){
+  const items = document.querySelectorAll(".actor-item");
+  items[index].classList.toggle("open");
+}
+
+addActorBtn.addEventListener("click", function(){
+  const name = actorNameInput.value.trim();
+  const role = actorRoleInput.value.trim();
+  const trait = actorTraitInput.value.trim();
+
+  if(name === "" || role === "" || trait === ""){
+    alert("Nama tokoh, peran, dan watak harus diisi!");
+    return;
+  }
+
+  if(editActorIndex === null){
+    actors.push({
+      name: name,
+      role: role,
+      trait: trait
+    });
+  } else {
+    actors[editActorIndex] = {
+      name: name,
+      role: role,
+      trait: trait
+    };
+
+    editActorIndex = null;
+    addActorBtn.innerText = "Tambah Tokoh";
+  }
+
+  saveActors();
+  renderActors();
+
+  actorNameInput.value = "";
+  actorRoleInput.value = "";
+  actorTraitInput.value = "";
+});
+
+window.editActor = function(index){
+  const actor = actors[index];
+
+  actorNameInput.value = actor.name;
+  actorRoleInput.value = actor.role || "";
+  actorTraitInput.value = actor.trait;
+
+  editActorIndex = index;
+  addActorBtn.innerText = "Simpan Tokoh";
+};
+
+window.deleteActor = function(index){
+  actors.splice(index, 1);
+  saveActors();
+  renderActors();
+};
+
+renderActors();
+
+copyBtn.addEventListener("click", function(){
+
+let result = "";
+
+for(let i = 1; i <= 40; i++){
+
+  const scene = allScenes[i];
+
+  if(!scene) continue;
+
+  if(
+    !scene.place &&
+    !scene.situation &&
+    scene.dialogs.length === 0
+  ) continue;
+
+  result += "==============================\n";
+  result += "🎬 SCENE " + i + "\n";
+  result += "==============================\n\n";
+
+  result += "📍 TEMPAT:\n";
+  result += scene.place + "\n\n";
+
+  result += "🎭 SITUASI / KONDISI:\n";
+  result += scene.situation + "\n\n";
+
+  result += "🌤️ CUACA:\n";
+  result += (scene.weather || "☀️ Cerah") + "\n\n";
+
+  result += "💬 DIALOG:\n\n";
+
+  scene.dialogs.forEach(function(item){
+
+    result += item.name.toUpperCase() + "\n";
+    result += item.text + "\n\n";
+
+  });
+
+  result += "\n\n";
+}
+
+navigator.clipboard.writeText(result);
+
+copyBtn.innerText = "✅ Tersalin!";
+
+setTimeout(function(){
+  copyBtn.innerText = "📋 Salin Semua Script";
+}, 2000);
+
+});
+
+const copyActorBtn = document.getElementById("copyActorBtn");
+
+copyActorBtn.addEventListener("click", function(){
+
+  let result = "🎭 TOKOH PEMAIN\n\n";
+
+  actors.forEach(function(actor, index){
+
+    result += (index + 1) + ". " + actor.name + "\n";
+    result += "Peran: " + (actor.role || "Belum diisi") + "\n";
+    result += "Watak: " + actor.trait + "\n\n";
+
+  });
+
+  navigator.clipboard.writeText(result);
+
+  copyActorBtn.innerText = "✅ Tersalin!";
+
+  setTimeout(function(){
+
+    copyActorBtn.innerText = "📋 Salin";
+
+  }, 2000);
+
+});
+
+loadScene();
+</script>
+
+</body>
+</html>
