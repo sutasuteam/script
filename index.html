@@ -1466,38 +1466,47 @@ function loadScene(){
 }
 
 async function loadFromSupabase(){
-  const { data, error } = await db
-    .from("dialogs")
-    .select("*")
-    .order("id", { ascending: true });
 
-  if(error){
-    console.log(error);
-    return;
+const { data, error } = await db
+  .from("dialogs")
+  .select("*")
+  .order("id", { ascending: true });
+
+if(error){
+  console.log(error);
+  return;
+}
+
+allScenes = {};
+
+data.forEach(function(row){
+
+  if(!allScenes[row.scene]){
+    allScenes[row.scene] = {
+      place: "",
+      situation: "",
+      weather: "☀️ Cerah",
+      dialogs: []
+    };
   }
 
-  allScenes = {};
+  // UPDATE SELALU
+  allScenes[row.scene].place = row.place || "";
+  allScenes[row.scene].situation = row.situation || "";
+  allScenes[row.scene].weather = row.weather || "☀️ Cerah";
 
-  data.forEach(function(row){
-    if(!allScenes[row.scene]){
-      allScenes[row.scene] = {
-        place: row.place || "",
-        situation: row.situation || "",
-        weather: row.weather || "☀️ Cerah",
-        dialogs: []
-      };
-    }
-
-    allScenes[row.scene].dialogs.push({
-      name: row.character,
-      text: row.message,
-      side: row.position,
-      avatar: row.avatar
-    });
+  allScenes[row.scene].dialogs.push({
+    name: row.character,
+    text: row.message,
+    side: row.position,
+    avatar: row.avatar
   });
 
-  localStorage.setItem("allScenes", JSON.stringify(allScenes));
-  loadScene();
+});
+
+localStorage.setItem("allScenes", JSON.stringify(allScenes));
+
+loadScene();
 }
 
 function renderScript(){
@@ -1518,10 +1527,17 @@ function renderScript(){
     const row=document.createElement("div");
     row.className="dialog-row "+item.side;
 
+    const actorData = actors.find(a =>
+  a.name.toLowerCase() === item.name.toLowerCase()
+);
+
     row.innerHTML=`
       <div class="character">
         <img class="character-icon" src="${avatarSrc(item.avatar)}">
-        <span>${item.name}</span>
+        <span>
+  ${item.name}
+  ${actorData?.role ? "• " + actorData.role : ""}
+</span>
       </div>
 
       <div class="bubble">${item.text}</div>
@@ -1865,9 +1881,13 @@ async function startApp(){
   await loadActorsFromSupabase();
 
   setInterval(async ()=>{
+  if(document.activeElement !== situationInput){
     await loadFromSupabase();
-    await loadActorsFromSupabase();
-  }, 3000);
+  }
+
+  await loadActorsFromSupabase();
+
+}, 10000);
 }
 
 startApp();
