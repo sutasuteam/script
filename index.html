@@ -8,6 +8,125 @@
 <link rel="icon" type="image/x-icon" href="./ico/movies.png">
 
 <style>
+
+#scriptViewer{
+  display:none;
+  min-height:100vh;
+  background:#dcdcdc;
+  padding:40px;
+}
+
+.viewer-paper{
+  background:white;
+  max-width:900px;
+  margin:auto;
+  padding:60px;
+  border-radius:12px;
+  box-shadow:0 0 20px rgba(0,0,0,0.15);
+}
+
+.viewer-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:40px;
+  gap:20px;
+}
+
+.viewer-back{
+  width:auto!important;
+  background:black;
+  color:white;
+  padding:12px 18px;
+  border-radius:10px;
+  font-weight:bold;
+}
+
+.viewer-print{
+  width:auto!important;
+  background:#00a86b;
+  color:white;
+  padding:12px 18px;
+  border-radius:10px;
+  font-weight:bold;
+}
+
+.viewer-title{
+  text-align:center;
+  font-size:42px;
+  font-weight:bold;
+  margin-bottom:50px;
+}
+
+.viewer-scene{
+  margin-bottom:60px;
+}
+
+.viewer-scene-title{
+  font-size:28px;
+  font-weight:bold;
+  border-bottom:2px solid black;
+  padding-bottom:10px;
+  margin-bottom:20px;
+}
+
+.viewer-info{
+  margin-bottom:25px;
+  line-height:1.8;
+  font-size:18px;
+}
+
+.viewer-dialog{
+  margin-bottom:30px;
+}
+
+.viewer-character{
+  font-size:22px;
+  font-weight:bold;
+  margin-bottom:8px;
+}
+
+.viewer-role{
+  color:#666;
+  margin-bottom:10px;
+}
+
+.viewer-message{
+  font-size:20px;
+  line-height:1.9;
+  padding-left:25px;
+}
+
+@media print{
+
+  body *{
+    visibility:hidden;
+  }
+
+  #scriptViewer,
+  #scriptViewer *{
+    visibility:visible;
+  }
+
+  #scriptViewer{
+    position:absolute;
+    inset:0;
+    padding:0;
+    background:white;
+  }
+
+  .viewer-paper{
+    box-shadow:none;
+    max-width:100%;
+    border-radius:0;
+  }
+
+  .viewer-top{
+    display:none;
+  }
+
+}
+
 *{box-sizing:border-box}
 
 body{margin:0;font-family:Arial,sans-serif;background:#111}
@@ -1092,9 +1211,9 @@ button{
 
 
 
-
-
 <body>
+
+  <div id="scriptViewer" style="display:none;"></div>
 
   <div id="loginPage" class="login-page">
   
@@ -1129,13 +1248,19 @@ button{
       </h1>
     
       <div class="title-actions">
+
+        <button id="viewScriptBtn" class="copy-btn">
+          📄 Lihat Script
+        </button>
+      
         <button id="copyBtn" class="copy-btn">
           📋 Salin Semua Script
         </button>
-    
+      
         <button id="logoutBtn" class="logout-btn">
           🚪 Logout
         </button>
+      
       </div>
     
     </div>
@@ -1293,6 +1418,108 @@ button{
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const scriptViewer = document.getElementById("scriptViewer");
+
+viewScriptBtn.addEventListener("click", function(){
+
+  document.querySelector(".container").style.display = "none";
+
+  scriptViewer.style.display = "block";
+
+  let html = `
+    <div class="viewer-paper">
+
+      <div class="viewer-top">
+
+        <button class="viewer-back" id="backToApp">
+          ⬅ Kembali
+        </button>
+
+        <button class="viewer-print" onclick="window.print()">
+          🖨️ Print / Save PDF
+        </button>
+
+      </div>
+
+      <div class="viewer-title">
+        🎬 Susah Untuk Bilang Cinta
+      </div>
+  `;
+
+  for(let i = 1; i <= 40; i++){
+
+    const scene = allScenes[i];
+
+    if(!scene) continue;
+
+    if(
+      !scene.place &&
+      !scene.situation &&
+      scene.dialogs.length === 0
+    ) continue;
+
+    html += `
+      <div class="viewer-scene">
+
+        <div class="viewer-scene-title">
+          SCENE ${i}
+        </div>
+
+        <div class="viewer-info">
+          <div><b>📍 Tempat:</b> ${scene.place || "-"}</div>
+          <div><b>🎭 Situasi:</b> ${scene.situation || "-"}</div>
+          <div><b>🌤️ Cuaca:</b> ${scene.weather || "☀️ Cerah"}</div>
+        </div>
+    `;
+
+    scene.dialogs.forEach(function(item){
+
+      const actorData = actors.find(a =>
+        a.name.toLowerCase() === item.name.toLowerCase()
+      );
+
+      html += `
+        <div class="viewer-dialog">
+
+          <div class="viewer-character">
+            ${item.name}
+          </div>
+
+          <div class="viewer-role">
+            ${actorData?.role || ""}
+          </div>
+
+          <div class="viewer-message">
+            ${item.text}
+          </div>
+
+        </div>
+      `;
+    });
+
+    html += `</div>`;
+  }
+
+  html += `</div>`;
+
+  scriptViewer.innerHTML = html;
+
+  document
+    .getElementById("backToApp")
+    .addEventListener("click", function(){
+
+      scriptViewer.style.display = "none";
+
+      document.querySelector(".container").style.display = "grid";
+
+    });
+
+});
+  
+  </script>
 
 <script>
 
@@ -1889,6 +2116,8 @@ async function startApp(){
 
 }, 10000);
 }
+
+
 
 startApp();
 </script>
