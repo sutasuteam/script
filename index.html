@@ -12,17 +12,17 @@
 #scriptViewer{
   display:none;
   min-height:100vh;
-  background:#dcdcdc;
-  padding:40px;
+  background:#dfe3e8;
+  padding:50px 20px;
 }
 
 .viewer-paper{
-  background:white;
-  max-width:900px;
+  background:#f7f7f7;
+  max-width:1000px;
   margin:auto;
-  padding:60px;
-  border-radius:12px;
-  box-shadow:0 0 20px rgba(0,0,0,0.15);
+  padding:50px;
+ 
+  box-shadow:0 15px 40px rgba(0,0,0,0.18);
 }
 
 .viewer-top{
@@ -35,66 +35,154 @@
 
 .viewer-back{
   width:auto!important;
-  background:black;
+  background:#111;
   color:white;
-  padding:12px 18px;
-  border-radius:10px;
+  padding:12px 20px;
+  border-radius:12px;
   font-weight:bold;
+  font-size:15px;
 }
 
 .viewer-print{
   width:auto!important;
-  background:#00a86b;
+  background:#2a9d62;
   color:white;
-  padding:12px 18px;
-  border-radius:10px;
+  padding:12px 20px;
+  border-radius:12px;
   font-weight:bold;
+  font-size:15px;
 }
 
 .viewer-title{
-  text-align:center;
-  font-size:42px;
-  font-weight:bold;
+  font-size:54px;
+  font-weight:900;
+  line-height:1.2;
   margin-bottom:50px;
+  color:#111;
+  position:relative;
 }
 
+
+
 .viewer-scene{
-  margin-bottom:60px;
+  margin-bottom:55px;
 }
 
 .viewer-scene-title{
-  font-size:28px;
-  font-weight:bold;
-  border-bottom:2px solid black;
-  padding-bottom:10px;
-  margin-bottom:20px;
+  display:inline-block;
+  font-size:38px;
+  font-weight:900;
+  color:#111;
+  margin-bottom:18px;
+  position:relative;
+}
+
+.viewer-scene-title::after{
+  content:"";
+  display:block;
+  width:100px;
+  height:4px;
+  background:#2d7fe6;
+  margin-top:8px;
 }
 
 .viewer-info{
-  margin-bottom:25px;
-  line-height:1.8;
+  background:#e7edf4;
+  border-left:6px solid #5da1ff;
+  padding:20px 24px;
+  margin-bottom:28px;
   font-size:18px;
+  line-height:2;
+  box-shadow:8px 8px 0 rgba(0,0,0,0.08);
 }
 
 .viewer-dialog{
-  margin-bottom:30px;
+  background:#f6ebe7;
+  border-left:6px solid #f08c5a;
+  padding:22px 24px;
+  margin-bottom:24px;
+  box-shadow:8px 8px 0 rgba(0,0,0,0.08);
 }
 
 .viewer-character{
-  font-size:22px;
-  font-weight:bold;
-  margin-bottom:8px;
+  font-size:24px;
+  font-weight:900;
+  color:#111;
+  margin-bottom:6px;
 }
 
 .viewer-role{
+  font-size:15px;
   color:#666;
-  margin-bottom:10px;
+  margin-bottom:14px;
+  font-style:italic;
 }
 
 .viewer-message{
   font-size:20px;
   line-height:1.9;
-  padding-left:25px;
+  color:#222;
+  white-space:pre-wrap;
+}
+
+@media(max-width:768px){
+
+  #scriptViewer{
+    padding:20px 10px;
+  }
+
+  .viewer-paper{
+    padding:25px;
+    border-width:4px;
+  }
+
+  .viewer-title{
+    font-size:34px;
+  }
+
+  .viewer-scene-title{
+    font-size:26px;
+  }
+
+  .viewer-info,
+  .viewer-dialog{
+    padding:16px;
+  }
+
+  .viewer-message{
+    font-size:16px;
+  }
+
+}
+
+@media print{
+
+  body *{
+    visibility:hidden;
+  }
+
+  #scriptViewer,
+  #scriptViewer *{
+    visibility:visible;
+  }
+
+  #scriptViewer{
+    position:absolute;
+    inset:0;
+    padding:0;
+    background:white;
+  }
+
+  .viewer-paper{
+    border:none;
+    box-shadow:none;
+    max-width:100%;
+  }
+
+  .viewer-top{
+    display:none;
+  }
+
 }
 
 @media print{
@@ -1243,9 +1331,10 @@ button{
 
     <div class="title-bar">
 
-      <h1 class="movie-title">
-        🎬 Susah Untuk Bilang Cinta
-      </h1>
+      
+        <h1 class="viewer-title">🎬 Susah Untuk
+          Bilang Cinta</h1>
+      
     
       <div class="title-actions">
 
@@ -1451,57 +1540,64 @@ viewScriptBtn.addEventListener("click", function(){
 
   for(let i = 1; i <= 40; i++){
 
-    const scene = allScenes[i];
+const scene = allScenes[i];
 
-    if(!scene) continue;
+// kalau scene belum ada skip
+if(!scene) continue;
 
-    if(
-      !scene.place &&
-      !scene.situation &&
-      scene.dialogs.length === 0
-    ) continue;
+// pastikan dialogs selalu array
+const dialogs = scene.dialogs || [];
 
-    html += `
-      <div class="viewer-scene">
+// tampilkan scene jika punya:
+// tempat ATAU situasi ATAU dialog
+const hasContent =
+  (scene.place && scene.place.trim() !== "") ||
+  (scene.situation && scene.situation.trim() !== "") ||
+  dialogs.length > 0;
 
-        <div class="viewer-scene-title">
-          SCENE ${i}
-        </div>
+if(!hasContent) continue;
 
-        <div class="viewer-info">
-          <div><b>📍 Tempat:</b> ${scene.place || "-"}</div>
-          <div><b>🎭 Situasi:</b> ${scene.situation || "-"}</div>
-          <div><b>🌤️ Cuaca:</b> ${scene.weather || "☀️ Cerah"}</div>
-        </div>
-    `;
+html += `
+  <div class="viewer-scene">
 
-    scene.dialogs.forEach(function(item){
+    <div class="viewer-scene-title">
+      SCENE ${i}
+    </div>
 
-      const actorData = actors.find(a =>
-        a.name.toLowerCase() === item.name.toLowerCase()
-      );
+    <div class="viewer-info">
+      <div><b>📍 Tempat:</b> ${scene.place || "-"}</div>
+      <div><b>🎭 Situasi:</b> ${scene.situation || "-"}</div>
+      <div><b>🌤️ Cuaca:</b> ${scene.weather || "☀️ Cerah"}</div>
+    </div>
+`;
 
-      html += `
-        <div class="viewer-dialog">
+dialogs.forEach(function(item){
 
-          <div class="viewer-character">
-            ${item.name}
-          </div>
+  const actorData = actors.find(a =>
+    a.name.toLowerCase() === item.name.toLowerCase()
+  );
 
-          <div class="viewer-role">
-            ${actorData?.role || ""}
-          </div>
+  html += `
+    <div class="viewer-dialog">
 
-          <div class="viewer-message">
-            ${item.text}
-          </div>
+      <div class="viewer-character">
+        ${item.name}
+      </div>
 
-        </div>
-      `;
-    });
+      <div class="viewer-role">
+        ${actorData?.role || ""}
+      </div>
 
-    html += `</div>`;
-  }
+      <div class="viewer-message">
+        ${item.text}
+      </div>
+
+    </div>
+  `;
+});
+
+html += `</div>`;
+}
 
   html += `</div>`;
 
