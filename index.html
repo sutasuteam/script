@@ -9,6 +9,93 @@
 
 <style>
 
+.movie-title-wrap{
+  display:flex;
+  align-items:center;
+  gap:12px;
+
+  flex:1;
+  min-width:0;
+}
+
+.movie-icon{
+  font-size:34px;
+  flex-shrink:0;
+}
+
+.script-select-wrap{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.delete-script-btn{
+  width:auto!important;
+
+  padding:12px 14px;
+
+  border-radius:12px;
+
+  background:#e63946;
+
+  color:white;
+
+  font-size:16px;
+}
+
+.script-select-wrap{
+  display:flex;
+  gap:10px;
+  margin-bottom:20px;
+}
+
+.script-select{
+  flex:1;
+  min-width:0;
+}
+
+.delete-script-btn{
+  width:auto!important;
+  padding:12px 16px;
+}
+
+.title-left{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex:1;
+  min-width:0;
+}
+.movie-title-input{
+  flex:1;
+  min-width:0;
+
+  font-size:34px;
+  font-weight:900;
+
+  border:none;
+  background:transparent;
+
+  padding:0;
+
+  color:#111;
+}
+
+.movie-title-input:focus{
+  outline:none;
+}
+
+.create-script-btn{
+  width:auto!important;
+  padding:12px 16px;
+  border-radius:12px;
+  background:#111;
+}
+
+.script-select{
+  width:auto!important;
+  min-width:180px;
+}
 #scriptViewer{
   display:none;
   min-height:100vh;
@@ -1248,6 +1335,8 @@ button{
   padding:6px 7px!important;
 }
 
+
+
 @media(max-width:384px){
 
 #scriptViewer{
@@ -1468,15 +1557,40 @@ button{
 
   <div class="script-box">
 
+    
+
     <div class="title-bar">
 
+      <div class="title-left">
+
+        <div class="movie-title-wrap">
       
-        <h1 class="viewer-title">🎬 Susah Untuk
-          Bilang Cinta</h1>
+          <span class="movie-icon">
+            🎬
+          </span>
       
+          <input
+            type="text"
+            id="newScriptName"
+            class="movie-title-input"
+            placeholder="Nama Script..."
+            value="Susah Untuk Bilang Cinta"
+            spellcheck="false"
+            autocomplete="off"
+          >
+      
+        </div>
+      
+        <button id="createScriptBtn" class="create-script-btn">
+          ➕
+        </button>
+      
+
+      
+      </div>
     
       <div class="title-actions">
-
+    
         <button id="viewScriptBtn" class="copy-btn">
           📄 Lihat Script
         </button>
@@ -1492,6 +1606,8 @@ button{
       </div>
     
     </div>
+
+    
 
     <div id="chatArea" class="chat-area"></div>
 
@@ -1597,6 +1713,8 @@ button{
 
   </div>
 
+
+
   <div class="right-column">
 
     <div class="sidebar">
@@ -1605,8 +1723,20 @@ button{
         Halaman ini digunakan untuk menulis naskah film dalam bentuk dialog visual.
       </p>
     </div>
+
+    <div class="script-select-wrap">
+      
+      <select id="scriptSelector" class="script-select"></select>
+  
+      <button id="deleteScriptBtn" class="delete-script-btn">
+        🗑️
+      </button>
+  
+    </div>
   
     <div class="actor-mini-section">
+
+
   
       <div class="actor-table-box">
         <div class="actor-header">
@@ -1643,8 +1773,6 @@ button{
 
 
 
-</div>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
@@ -1678,7 +1806,7 @@ document.body.style.overflowY = "auto";
       </div>
 
       <div class="viewer-title">
-        🎬 Susah Untuk Bilang Cinta
+        🎬 ${currentScript}
       </div>
   `;
 
@@ -1807,6 +1935,7 @@ const sideInput = document.getElementById("sideInput");
 const addBtn = document.getElementById("addBtn");
 const clearBtn = document.getElementById("clearBtn");
 const copyBtn = document.getElementById("copyBtn");
+const viewScriptBtn = document.getElementById("viewScriptBtn");
 
 
 const logoutBtn = document.getElementById("logoutBtn");
@@ -1862,70 +1991,294 @@ for(let i=1;i<=40;i++){
   sceneSelect.appendChild(option);
 }
 
-let allScenes=JSON.parse(localStorage.getItem("allScenes"))||{};
-let currentScene="1";
-let editIndex=null;
+let scripts =
+  JSON.parse(localStorage.getItem("movieScripts")) || {};
+
+if(Object.keys(scripts).length === 0){
+
+  scripts["Susah Untuk Bilang Cinta"] = {
+    scenes:{},
+    actors:[]
+  };
+
+}
+
+let currentScript =
+  localStorage.getItem("currentScript");
+
+  if(!localStorage.getItem("movieScripts")){
+
+localStorage.setItem(
+  "movieScripts",
+  JSON.stringify(scripts)
+);
+
+}
+
+if(
+  !currentScript ||
+  !scripts[currentScript]
+){
+  currentScript = Object.keys(scripts)[0];
+}
+
+let allScenes = scripts[currentScript].scenes;
+let actors = scripts[currentScript].actors;
+
+let currentScene = "1";
+let editIndex = null;
+
+
+
+const scriptSelector = document.getElementById("scriptSelector");
+const deleteScriptBtn = document.getElementById("deleteScriptBtn");
+const createScriptBtn = document.getElementById("createScriptBtn");
+const newScriptName = document.getElementById("newScriptName");
+
+function saveScripts(){
+
+  scripts[currentScript] = {
+    scenes: allScenes,
+    actors: actors
+  };
+
+  localStorage.setItem(
+    "movieScripts",
+    JSON.stringify(scripts)
+  );
+
+  localStorage.setItem(
+    "currentScript",
+    currentScript
+  );
+}
+
+function renderScriptSelector(){
+
+scriptSelector.innerHTML = "";
+
+Object.keys(scripts).forEach(function(name){
+
+  const option = document.createElement("option");
+
+  option.value = name;
+  option.textContent = "🎬 " + name;
+
+  if(name === currentScript){
+    option.selected = true;
+  }
+
+  scriptSelector.appendChild(option);
+
+});
+
+newScriptName.value = currentScript;
+
+}
+
+
+createScriptBtn.addEventListener("click", function(){
+
+const name = newScriptName.value.trim();
+
+if(name === ""){
+  alert("Masukkan nama script!");
+  return;
+}
+
+if(!scripts[name]){
+
+  scripts[name] = {
+    scenes:{},
+    actors:[]
+  };
+
+}
+
+currentScript = name;
+
+allScenes = scripts[name].scenes;
+actors = scripts[name].actors;
+
+saveScripts();
+
+renderScriptSelector();
+renderActors();
+loadScene();
+
+});
+
+deleteScriptBtn.addEventListener("click", function(){
+
+const totalScripts = Object.keys(scripts).length;
+
+if(totalScripts <= 1){
+  alert("Minimal harus ada 1 script!");
+  return;
+}
+
+if(!confirm("Hapus script '" + currentScript + "' ?")){
+  return;
+}
+
+delete scripts[currentScript];
+
+currentScript = Object.keys(scripts)[0];
+
+allScenes = scripts[currentScript].scenes;
+actors = scripts[currentScript].actors;
+
+saveScripts();
+
+renderScriptSelector();
+renderActors();
+loadScene();
+
+});
+
+newScriptName.addEventListener("input", function(){
+
+const newName = newScriptName.value.trim();
+
+if(newName === "") return;
+
+if(newName === currentScript) return;
+
+if(scripts[newName]){
+  return;
+}
+
+scripts[newName] = scripts[currentScript];
+
+delete scripts[currentScript];
+
+currentScript = newName;
+
+saveScripts();
+
+startApp();
+
+renderScriptSelector();
+
+
+
+});
+
+scriptSelector.addEventListener("change", function(){
+
+currentScript = scriptSelector.value;
+
+allScenes = scripts[currentScript].scenes;
+actors = scripts[currentScript].actors;
+
+newScriptName.value = currentScript;
+
+saveScripts();
+
+renderActors();
+loadScene();
+
+});
 
 function getScene(){
-  if(!allScenes[currentScene]){
-    allScenes[currentScene]={place:"",situation:"",dialogs:[]};
-  }
-  return allScenes[currentScene];
+
+if(!allScenes[currentScene]){
+
+  allScenes[currentScene] = {
+    place:"",
+    situation:"",
+    weather:"☀️ Cerah",
+    dialogs:[]
+  };
+
+}
+
+return allScenes[currentScene];
 }
 
 async function saveAll(){
-  console.log("🔥 saveAll jalan");
 
-  localStorage.setItem("allScenes", JSON.stringify(allScenes));
+saveScripts();
 
-  const scene = getScene();
+localStorage.setItem(
+  "allScenes",
+  JSON.stringify(allScenes)
+);
 
-  const rows = scene.dialogs.map(function(item){
-    return {
-      scene: currentScene,
-      character: item.name,
-      message: item.text,
-      position: item.side,
-      avatar: item.avatar || "male",
-      weather: scene.weather || "☀️ Cerah",
+const rows = [];
+
+Object.keys(allScenes).forEach(function(sceneNumber){
+
+  const scene = allScenes[sceneNumber];
+
+  const dialogs = scene.dialogs || [];
+
+  if(dialogs.length === 0){
+
+    rows.push({
+      scene: sceneNumber,
       place: scene.place || "",
-      situation: scene.situation || ""
-    };
-  });
+      situation: scene.situation || "",
+      weather: scene.weather || "☀️ Cerah",
+      character: "",
+      message: "",
+      position: "left",
+      avatar: "male"
+    });
 
-  console.log("Data yang dikirim:", rows);
+  } else {
 
-  const deleteResult = await db
-    .from("dialogs")
-    .delete()
-    .eq("scene", currentScene);
+    dialogs.forEach(function(item){
 
-  if(deleteResult.error){
-    alert("DELETE ERROR: " + deleteResult.error.message);
-    console.error(deleteResult.error);
-    return;
+      rows.push({
+        scene: sceneNumber,
+        place: scene.place || "",
+        situation: scene.situation || "",
+        weather: scene.weather || "☀️ Cerah",
+        character: item.name,
+        message: item.text,
+        position: item.side,
+        avatar: item.avatar
+      });
+
+    });
+
   }
 
-  if(rows.length === 0){
-    console.log("Tidak ada dialog untuk disimpan");
-    return;
-  }
+});
 
-  const insertResult = await db
-    .from("dialogs")
-    .insert(rows)
-    .select();
+console.log("Data yang dikirim:", rows);
 
-  if(insertResult.error){
-    alert("INSERT ERROR: " + insertResult.error.message);
-    console.error(insertResult.error);
-    return;
-  }
+const deleteResult = await db
+  .from("dialogs")
+  .delete()
+  .neq("id", 0);
 
-  alert("✅ Data berhasil masuk Supabase!");
-  console.log("✅ Insert berhasil:", insertResult.data);
+if(deleteResult.error){
+  alert("DELETE ERROR: " + deleteResult.error.message);
+  console.error(deleteResult.error);
+  return;
 }
 
+if(rows.length === 0){
+  console.log("Tidak ada dialog untuk disimpan");
+  return;
+}
+
+const insertResult = await db
+  .from("dialogs")
+  .insert(rows)
+  .select();
+
+if(insertResult.error){
+  alert("INSERT ERROR: " + insertResult.error.message);
+  console.error(insertResult.error);
+  return;
+}
+
+console.log("✅ Insert berhasil:", insertResult.data);
+
+}
 function getAvatar(){
   return document.querySelector('input[name="avatar"]:checked').value;
 }
@@ -1971,31 +2324,39 @@ allScenes = {};
 data.forEach(function(row){
 
   if(!allScenes[row.scene]){
+
     allScenes[row.scene] = {
       place: "",
       situation: "",
       weather: "☀️ Cerah",
       dialogs: []
     };
+
   }
 
-  // UPDATE SELALU
   allScenes[row.scene].place = row.place || "";
   allScenes[row.scene].situation = row.situation || "";
   allScenes[row.scene].weather = row.weather || "☀️ Cerah";
 
-  allScenes[row.scene].dialogs.push({
-    name: row.character,
-    text: row.message,
-    side: row.position,
-    avatar: row.avatar
-  });
+  if(row.character && row.message){
+
+    allScenes[row.scene].dialogs.push({
+      name: row.character,
+      text: row.message,
+      side: row.position,
+      avatar: row.avatar
+    });
+
+  }
 
 });
 
-localStorage.setItem("allScenes", JSON.stringify(allScenes));
+scripts[currentScript].scenes = allScenes;
+
+saveScripts();
 
 loadScene();
+
 }
 
 function renderScript(){
@@ -2145,7 +2506,7 @@ const addActorBtn = document.getElementById("addActorBtn");
 const actorTableBody = document.getElementById("actorTableBody");
 
 
-let actors = JSON.parse(localStorage.getItem("actors")) || [];
+
 let editActorIndex = null;
 
 async function loadActorsFromSupabase(){
@@ -2162,12 +2523,27 @@ if(error){
 
 actors = data || [];
 
+scripts[currentScript].actors = actors;
+
+saveScripts();
+
+renderScriptSelector();
 renderActors();
+
+startApp();
+
 }
 
 async function saveActors(){
 
-localStorage.setItem("actors", JSON.stringify(actors));
+scripts[currentScript].actors = actors;
+
+saveScripts();
+
+localStorage.setItem(
+  "actors",
+  JSON.stringify(actors)
+);
 
 const deleteResult = await db
   .from("actors")
@@ -2301,7 +2677,7 @@ for(let i = 1; i <= 40; i++){
   if(
     !scene.place &&
     !scene.situation &&
-    scene.dialogs.length === 0
+    (scene.dialogs || []).length === 0
   ) continue;
 
   result += "==============================\n";
@@ -2366,10 +2742,14 @@ copyActorBtn.addEventListener("click", function(){
 });
 
 async function startApp(){
-  await loadFromSupabase();
-  await loadActorsFromSupabase();
 
-  setInterval(async ()=>{
+await loadFromSupabase();
+await loadActorsFromSupabase();
+
+renderScriptSelector();
+
+setInterval(async ()=>{
+
   if(document.activeElement !== situationInput){
     await loadFromSupabase();
   }
@@ -2377,11 +2757,16 @@ async function startApp(){
   await loadActorsFromSupabase();
 
 }, 10000);
+
 }
 
 
-
 startApp();
+
+
+
+
+
 </script>
 
 
