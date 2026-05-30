@@ -284,14 +284,23 @@
   background-color: #000 !important;
 }
 
-/* === STYLE DIALOG TOOLS DAN SCENE TOOLS - DISEJAJARKAN === */
+/* === STYLE DIALOG TOOLS DAN SCENE TOOLS - DISEJAJARKAN & DIPINDAH POSISI === */
 .tools-grid {
   display: grid;
+  /* Ubah urutan: Dialog Tools kiri, Scene Tools kanan */
   grid-template-columns: 1fr 1fr;
   gap: 20px;
   margin-top: 20px;
   align-items: start !important;
 }
+/* Urutan elemen: dialog-tools = 1 (kiri), scene-tools = 2 (kanan) */
+.dialog-tools {
+  order: 1 !important;
+}
+.scene-tools {
+  order: 2 !important;
+}
+
 .scene-tools, .dialog-tools {
   background: #fff;
   padding: 15px;
@@ -307,7 +316,7 @@
 }
 .scene-tools .spacer, .dialog-tools .spacer {
   flex-grow: 1 !important;
-  min-height: 20px !important;
+  min-height:  20px !important;
 }
 .dialog-tools input, .dialog-tools textarea, .dialog-tools select {
   width: 100%;
@@ -421,6 +430,46 @@
   border-radius: 4px;
   cursor: pointer;
 }
+
+/* === PERBAIKAN CUACA: BISA DITEKAN + WARNA BERUBAH === */
+.weather-picker {
+  display: flex;
+  gap: 20px;
+  margin: 10px 0;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.weather-picker label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 15px;
+  color: #333;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+.weather-picker label:hover {
+  background: #f0f0f0;
+}
+.weather-picker input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+.weather-icon {
+  font-size: 20px;
+}
+/* Warna berubah saat dipilih */
+.weather-picker input:checked ~ .weather-icon,
+.weather-picker input:checked ~ span {
+  color: #007bff !important;
+  font-weight: bold;
+}
+.weather-picker input:checked + label {
+  background: #e6f2ff;
+}
 </style>
 
 </head>
@@ -463,26 +512,7 @@
     <div id="chatArea" class="chat-area"></div>
 
     <div class="tools-grid">
-      <div class="scene-tools">
-        <h3>Scene Tools</h3>
-        <select id="sceneSelect"></select>
-        <input id="placeInput" type="text" placeholder="Tempat: contoh Rumah Karina">
-        <textarea id="situationInput" placeholder="Situasi/Kondisi..."></textarea>
-
-<div class="weather-picker">
-  <label><input type="radio" name="weather" value="☀️ Cerah" checked><div class="weather-card">☀️<span>Cerah</span></div></label>
-  <label><input type="radio" name="weather" value="🌧️ Hujan"><div class="weather-card">🌧️<span>Hujan</span></div></label>
-  <label><input type="radio" name="weather" value="⛈️ Badai"><div class="weather-card">⛈️<span>Badai</span></div></label>
-  <label><input type="radio" name="weather" value="🌙 Malam"><div class="weather-card">🌙<span>Malam</span></div></label>
-  <label><input type="radio" name="weather" value="❄️ Salju"><div class="weather-card">❄️<span>Salju</span></div></label>
-  <label><input type="radio" name="weather" value="🌫️ Kabut"><div class="weather-card">🌫️<span>Kabut</span></div></label>
-</div>
-
-        <div class="spacer"></div>
-        <button id="saveSceneBtn" class="scene-btn">Simpan Scene</button>
-        <button id="deleteSceneBtn" class="danger">Hapus Scene Ini</button>
-      </div>
-
+      <!-- ✅ DIUBAH URUTAN: Dialog Tools di KIRI, Scene Tools di KANAN -->
       <div class="dialog-tools">
         <h3>Dialog Tools</h3>
         <input id="nameInput" type="text" placeholder="Nama karakter">
@@ -499,6 +529,51 @@
         <div class="spacer"></div>
         <button id="addBtn">Simpan Perubahan</button>
         <button id="clearBtn" class="danger">Hapus Semua Dialog</button>
+      </div>
+
+      <div class="scene-tools">
+        <h3>Scene Tools</h3>
+        <select id="sceneSelect"></select>
+        <input id="placeInput" type="text" placeholder="Tempat: contoh Rumah Karina">
+        <textarea id="situationInput" placeholder="Situasi/Kondisi..."></textarea>
+
+<!-- ✅ IKON CUACA: BISA DITEKAN + SESUAI GAMBAR KAMU -->
+<div class="weather-picker">
+  <label>
+    <input type="radio" name="weather" value="☀️ Cerah" checked>
+    <span class="weather-icon">☀️</span>
+    <span>Cerah</span>
+  </label>
+  <label>
+    <input type="radio" name="weather" value="☁️ Hujan">
+    <span class="weather-icon">☁️</span>
+    <span>Hujan</span>
+  </label>
+  <label>
+    <input type="radio" name="weather" value="🌩️ Badai">
+    <span class="weather-icon">🌩️</span>
+    <span>Badai</span>
+  </label>
+  <label>
+    <input type="radio" name="weather" value="🌙 Malam">
+    <span class="weather-icon">🌙</span>
+    <span>Malam</span>
+  </label>
+  <label>
+    <input type="radio" name="weather" value="❄️ Salju">
+    <span class="weather-icon">❄️</span>
+    <span>Salju</span>
+  </label>
+  <label>
+    <input type="radio" name="weather" value="🌫️ Kabut">
+    <span class="weather-icon">🌫️</span>
+    <span>Kabut</span>
+  </label>
+</div>
+
+        <div class="spacer"></div>
+        <button id="saveSceneBtn" class="scene-btn">Simpan Scene</button>
+        <button id="deleteSceneBtn" class="danger">Hapus Scene Ini</button>
       </div>
     </div>
   </div>
@@ -546,7 +621,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-console.log("✅ TOMBOL HAPUS DISEJAJARKAN");
+console.log("✅ URUTAN DIUBAH: Dialog Kiri, Scene Kanan");
 const supabaseUrl = 'https://btajgtzfoyadcnqfgjsg.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ0YWpndHpmb3lhZGNucWZnanNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3NTQ3NzEsImV4cCI6MjA5NTMzMDc3MX0.kD81Imzw3NQ_ZTgj5nRPrKfh7Ong7Zmwt7I7WeyeM5M';
 const db = supabase.createClient(supabaseUrl, supabaseKey);
@@ -798,7 +873,7 @@ createScriptBtn.addEventListener("click", async ()=>{
     currentGenre = g;
     genreInput.value = "";
     updateGenreDisplay();
-    localStorage.setItem("currentScript", currentScript);
+    localStorage.setItem("currentScript,", currentScript);
     localStorage.setItem("currentGenre", currentGenre);
     allScenes = {}; 
     actors = []; 
