@@ -10,18 +10,27 @@
 /* === PERBAIKAN TOTAL POSISI & TAMPILAN === */
 .title-bar {
   display: flex !important;
-  align-items: center !important; /* KUNCI: Semua elemen rata tengah vertikal */
-  justify-content: space-between !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
   position: relative !important;
   width: 100% !important;
   padding: 10px 0 !important;
   margin-bottom: 15px !important;
+  gap: 8px !important;
+}
+
+.title-top {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
 }
 
 .title-left {
   display: flex !important;
-  align-items: center !important; /* Judul & Tombol + SEJAJAR */
-  gap: 16px !important; /* Jarak antara judul dan tombol */
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 4px !important;
 }
 
 /* INPUT JUDUL SCRIPT */
@@ -38,6 +47,26 @@
   border: none !important;
   outline: none !important;
   background: transparent !important;
+  color: #000 !important;
+  width: 300px !important;
+  padding: 5px 0 !important;
+}
+
+/* === TAMPILAN GENRE DI BAWAH JUDUL === */
+.genre-display {
+  font-size: 15px !important;
+  color: #666 !important;
+  font-style: italic !important;
+  margin-left: 0 !important;
+  margin-bottom: 8px !important;
+}
+
+/* === KOTAK TOMBOL DI BAWAH GENRE === */
+.title-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin-left: 0 !important;
 }
 
 /* TOMBOL + : UKURAN & POSISI PAS */
@@ -49,8 +78,8 @@
   border: none !important;
   border-radius: 8px !important;
   background-color: #1a1a1a !important;
-  color: #ffffff !important; /* Warna putih */
-  font-size: 26px !important; /* Ukuran besar */
+  color: #ffffff !important;
+  font-size: 26px !important;
   font-weight: bold !important;
   display: flex !important;
   align-items: center !important;
@@ -58,18 +87,11 @@
   cursor: pointer !important;
   line-height: 1 !important;
   margin: 0 !important;
-  position: static !important; /* Hapus posisi aneh */
+  position: static !important;
   transform: none !important;
 }
 .create-script-btn:hover {
   background-color: #000 !important;
-}
-
-/* KOTAK TOMBOL KANAN: RATA TINGGI */
-.title-actions {
-  display: flex !important;
-  align-items: center !important; /* Semua tombol di kanan rata tengah */
-  gap: 8px !important;
 }
 
 /* STANDAR SEMUA TOMBOL AGAR SAMA */
@@ -77,7 +99,7 @@
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  height: 36px !important; /* TINGGI SAMA DENGAN TOMBOL + */
+  height: 36px !important;
   padding: 0 14px !important;
   border: none !important;
   border-radius: 8px !important;
@@ -94,6 +116,296 @@
 .logout-btn {
   background-color: #dc2626 !important;
   color: #fff !important;
+}
+
+/* === STYLE UNTUK TAMPILAN SCRIPT === */
+.viewer-paper {
+  background: #fff;
+  padding: 30px;
+  max-width: 1000px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+.viewer-top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+.viewer-back, .viewer-print {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.viewer-back { 
+  background: #111; 
+  color: #fff; 
+}
+.viewer-print { 
+  background: #28a745; 
+  color: #fff; 
+}
+.viewer-title { 
+  font-size: 28px; 
+  font-weight: bold; 
+  margin-bottom: 5px; 
+}
+.viewer-genre {
+  font-size: 16px;
+  color: #666;
+  font-style: italic;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+.viewer-scene { 
+  margin-bottom: 30px; 
+}
+.viewer-scene-title { 
+  font-size: 22px; 
+  font-weight: bold; 
+  margin-bottom: 12px; 
+  color: #222;
+}
+.viewer-info { 
+  background: #e9f0f8; 
+  padding: 18px; 
+  border-radius: 8px; 
+  border-left: 4px solid #007bff;
+  margin-bottom: 20px !important;
+  line-height: 1.6;
+}
+.viewer-dialog { 
+  padding: 15px 18px; 
+  border-radius: 8px; 
+  margin-bottom: 10px; 
+  border-left: 4px solid #fd7e14;
+  background: #ffeeda;
+}
+.viewer-character { 
+  font-weight: bold; 
+  font-size: 18px; 
+  margin-bottom: 5px;
+}
+.viewer-message { 
+  font-size: 16px; 
+  line-height: 1.5;
+}
+
+/* === STYLE BARU: TOMBOL DELETE TANPA BACKGROUND === */
+.delete-script-btn {
+  background-color: transparent !important;
+  color: #dc2626 !important;
+  border: none !important;
+  border-radius: 8px !important;
+  width: 40px !important;
+  height: 40px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 18px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  margin-left: 8px !important;
+}
+.delete-script-btn:hover {
+  background-color: rgba(220, 38, 38, 0.08) !important;
+  transform: translateY(-1px) !important;
+}
+.delete-script-btn:active {
+  transform: translateY(0) !important;
+  background-color: rgba(220, 38, 38, 0.12) !important;
+}
+.script-select-wrap {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 8px !important;
+  margin-bottom: 15px !important;
+  width: 100% !important;
+}
+.script-select-row {
+  display: flex !important;
+  width: 100% !important;
+  gap: 8px !important;
+}
+.script-select {
+  flex: 1 !important;
+  height: 40px !important;
+  padding: 0 12px !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 8px !important;
+  background-color: #ffffff !important;
+  font-size: 14px !important;
+  color: #1e293b !important;
+  outline: none !important;
+}
+.script-select:focus {
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.1) !important;
+}
+
+/* === STYLE BARU: INPUT GENRE + TOMBOL TAMBAHKAN === */
+.genre-input-wrap {
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+.genre-input {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  height: 40px !important;
+  padding: 0 12px !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 8px !important;
+  background-color: #ffffff !important;
+  font-size: 14px !important;
+  color: #1e293b !important;
+  outline: none !important;
+}
+.genre-input::placeholder {
+  color: #94a3b8 !important;
+}
+.add-genre-btn {
+  width: 100% !important;
+  height: 40px !important;
+  padding: 0 12px !important;
+  border: none !important;
+  border-radius: 8px !important;
+  background-color: #1a1a1a !important;
+  color: #fff !important;
+  font-size: 13px !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+}
+.add-genre-btn:hover {
+  background-color: #000 !important;
+}
+
+/* === STYLE DIALOG TOOLS SESUAI GAMBAR === */
+.tools-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 20px;
+}
+.scene-tools, .dialog-tools {
+  background: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
+.dialog-tools input, .dialog-tools textarea, .dialog-tools select {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+.icon-picker {
+  display: flex;
+  gap: 15px;
+  margin: 8px 0;
+}
+.icon-picker label {
+  cursor: pointer;
+}
+.icon-picker img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+}
+.icon-picker input:checked + img {
+  border-color: #007bff;
+}
+.dialog-tools button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 5px 0;
+}
+#addBtn {
+  background-color: #000;
+}
+#clearBtn {
+  background-color: #dc2626;
+}
+
+/* === TAMBAHAN UNTUK TABEL PEMAIN === */
+.actor-mini-section {
+  margin-top: 20px;
+}
+.actor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.actor-table-box {
+  background: #fff;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #eee;
+}
+.actor-list-style .actor-item {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+.actor-list-style .actor-item:last-child {
+  border-bottom: none;
+}
+.actor-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.actor-name {
+  font-weight: bold;
+  font-size: 16px;
+}
+.actor-buttons button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 5px;
+  font-size: 16px;
+}
+.actor-role, .actor-trait {
+  font-size: 13px;
+  color: #666;
+  margin-top: 4px;
+}
+.actor-form-box {
+  background: #fff;
+  border-radius: 8px;
+  padding: 12px;
+  border: 1px solid #eee;
+}
+.actor-form-box input, .actor-form-box textarea {
+  width: 100%;
+  padding: 8px;
+  margin: 6px 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+.actor-form-box button {
+  width: 100%;
+  padding: 8px;
+  background: #1a1a1a;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 </style>
 
@@ -115,17 +427,21 @@
 <div class="container">
   <div class="script-box">
     <div class="title-bar">
-      <div class="title-left">
-        <div class="movie-title-wrap">
-          <span class="movie-icon">🎬</span>
-          <input type="text" id="newScriptName" class="movie-title-input" placeholder="Nama Script..." value="" spellcheck="false" autocomplete="off">
+      <div class="title-top">
+        <div class="title-left">
+          <div class="movie-title-wrap">
+            <span class="movie-icon">🎬</span>
+            <input type="text" id="newScriptName" class="movie-title-input" placeholder="Nama Script..." value="" spellcheck="false" autocomplete="off">
+          </div>
         </div>
-        <!-- TOMBOL + SUDAH DIPERBAIKI POSISINYA -->
         <button id="createScriptBtn" class="create-script-btn">➕</button>
       </div>
+
+      <!-- ✅ GENRE + TOMBOL DI BAWAHNYA -->
+      <div class="genre-display" id="genreDisplay"></div>
       <div class="title-actions">
         <button id="viewScriptBtn" class="copy-btn">📄 Lihat Script</button>
-        <button id="copyBtn" class="copy-btn">📋 Salin Semua Script</button>
+        <button id="copyBtn" class="copy-btn">📋 Salin Script</button>
         <button id="logoutBtn" class="logout-btn">🚪 Logout</button>
       </div>
     </div>
@@ -156,8 +472,8 @@
         <h3>Dialog Tools</h3>
         <input id="nameInput" type="text" placeholder="Nama karakter">
         <div class="icon-picker">
-          <label><input type="radio" name="avatar" value="male" checked><img src="./ico/male.png" alt="Male"></label>
-          <label><input type="radio" name="avatar" value="female"><img src="./ico/female.png" alt="Female"></label>
+          <label><input type="radio" name="avatar" value="male" checked style="display:none"><img src="./ico/male.png" alt="Male"></label>
+          <label><input type="radio" name="avatar" value="female" style="display:none"><img src="./ico/female.png" alt="Female"></label>
         </div>
         <textarea id="dialogInput" placeholder="Tulis dialog..."></textarea>
         <select id="sideInput">
@@ -177,9 +493,16 @@
     </div>
 
     <div class="actor-mini-section">
+      <!-- ✅ INPUT GENRE + TOMBOL TAMBAHKAN DI SINI -->
       <div class="script-select-wrap">
-        <select id="scriptSelector" class="script-select"></select>
-        <button id="deleteScriptBtn" class="delete-script-btn">🗑️</button>
+        <div class="script-select-row">
+          <select id="scriptSelector" class="script-select"></select>
+          <button id="deleteScriptBtn" class="delete-script-btn">🗑️</button>
+        </div>
+        <div class="genre-input-wrap">
+          <input type="text" id="genreInput" class="genre-input" placeholder="✍️ Masukkan genre film...">
+          <button id="saveGenreBtn" class="add-genre-btn">Tambahkan</button>
+        </div>
       </div>
 
       <div class="actor-table-box">
@@ -202,9 +525,11 @@
 </div>
   </div>
 
+
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-console.log("✅ VERSI FIX: DATA PASTI MASUK, NAMA MUNCUL");
+console.log("✅ TOMBOL DIPINDAH KE BAWAH GENRE");
 const supabaseUrl = 'https://btajgtzfoyadcnqfgjsg.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ0YWpndHpmb3lhZGNucWZnanNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3NTQ3NzEsImV4cCI6MjA5NTMzMDc3MX0.kD81Imzw3NQ_ZTgj5nRPrKfh7Ong7Zmwt7I7WeyeM5M';
 const db = supabase.createClient(supabaseUrl, supabaseKey);
@@ -222,8 +547,9 @@ async function cekKoneksi() {
 }
 cekKoneksi();
 
-// ✅ NILAI AWAL: Pasti ada isinya
+// ✅ NILAI AWAL
 let currentScript = localStorage.getItem("currentScript") || "Script Baru";
+let currentGenre = localStorage.getItem("currentGenre") || "";
 if (!currentScript || currentScript === "null" || currentScript === "") {
     currentScript = "Script Baru";
     localStorage.setItem("currentScript", currentScript);
@@ -255,6 +581,9 @@ const loginBtn = document.getElementById("loginBtn");
 const scriptSelector = document.getElementById("scriptSelector");
 const createScriptBtn = document.getElementById("createScriptBtn");
 const newScriptName = document.getElementById("newScriptName");
+const genreInput = document.getElementById("genreInput"); // Input teks genre
+const saveGenreBtn = document.getElementById("saveGenreBtn"); // Tombol simpan genre
+const genreDisplay = document.getElementById("genreDisplay"); // Tampilan di bawah judul
 const actorTableBody = document.getElementById("actorTableBody");
 const addActorBtn = document.getElementById("addActorBtn");
 const actorNameInput = document.getElementById("actorNameInput");
@@ -301,52 +630,68 @@ function startApp(){
   renderScriptSelector();
   loadFromSupabase();
   loadActorsFromSupabase();
+  updateGenreDisplay(); // Tampilkan genre saat mulai
 }
 
-// ✅ TAMPILKAN DAFTAR SCRIPT - DIPERBAIKI AGAR MUNCUL
+// ✅ TAMPILKAN DAFTAR SCRIPT
 async function renderScriptSelector(){
   console.log("🔄 Memuat daftar...");
-  const { data, error } = await db.from("dialogs").select("script_name");
+  const { data, error } = await db.from("dialogs").select("script_name, genre");
   
   if(error) { console.error("❌ Gagal ambil daftar:", error); return; }
 
   let list = data ? [...new Set(data.map(s=>s.script_name))] : [];
   
-  // Bersihkan NULL/kosong
   list = list.filter(n => n && n !== "null" && n !== "" && n !== undefined);
   
-  // Kalau kosong, buat default
   if(list.length === 0) {
     list = ["Script Baru"];
-    // ⚠️ SIMPAN DATA AWAL AGAR ADA DI DATABASE
-    await simpanAwal("Script Baru");
+    await simpanAwal("Script Baru", ""); // Simpan genre kosong awal
   }
 
-  // Hapus duplikat
   list = [...new Set(list)];
 
-  // Tampilkan ke dropdown
   scriptSelector.innerHTML = "";
   list.forEach(n=>{ 
     const o = document.createElement("option"); 
     o.value = n; 
     o.textContent = "🎬 " + n; 
-    if(n === currentScript) o.selected = true;
+    if(n === currentScript) {
+      o.selected = true;
+      // Ambil genre yang tersimpan
+      const found = data.find(s => s.script_name === n);
+      if(found) {
+        currentGenre = found.genre || "";
+        genreInput.value = currentGenre;
+        updateGenreDisplay();
+      }
+    }
     scriptSelector.appendChild(o); 
   });
 
   newScriptName.value = currentScript;
   localStorage.setItem("currentScript", currentScript);
+  localStorage.setItem("currentGenre", currentGenre);
   console.log("✅ Daftar siap:", list);
 }
 
-// ✅ FUNGSI: SIMPAN DATA AWAL (WAJIB)
-async function simpanAwal(nama){
+// ✅ FUNGSI UPDATE TAMPILAN GENRE DI BAWAH JUDUL
+function updateGenreDisplay() {
+  if(currentGenre && currentGenre.trim() !== "") {
+    genreDisplay.textContent = `📂 Genre: ${currentGenre}`;
+  } else {
+    genreDisplay.textContent = ""; // Kosongkan jika tidak ada isi
+  }
+}
+
+// ✅ SIMPAN DATA AWAL
+async function simpanAwal(nama, genre = ""){
   try {
     const { data:cek } = await db.from("dialogs").select("script_name").eq("script_name", nama).limit(1);
     if(cek.length === 0){
       await db.from("dialogs").insert([{
         script_name: nama,
+        genre: genre,
         scene: "1",
         place: "",
         situation: "",
@@ -356,14 +701,14 @@ async function simpanAwal(nama){
         position: "left",
         avatar: "male"
       }]);
-      console.log("✅ Data awal disimpan:", nama);
+      console.log("✅ Data awal disimpan:", nama, "Genre:", genre);
     }
   } catch (err) {
     console.error("❌ Gagal simpan awal:", err);
   }
 }
 
-// ✅ GANTI NAMA SCRIPT - DIPERBAIKI 100%
+// ✅ GANTI NAMA SCRIPT
 newScriptName.addEventListener("change", async ()=>{
   const lama = currentScript; 
   const baru = newScriptName.value.trim();
@@ -373,7 +718,6 @@ newScriptName.addEventListener("change", async ()=>{
   console.log("✏️ Ganti nama:", lama, "→", baru);
 
   try {
-    // Cek nama baru ada?
     const { data:cari } = await db.from("dialogs").select("script_name").eq("script_name", baru).limit(1);
     if(cari.length > 0) { 
       alert("❌ Nama sudah ada!"); 
@@ -381,19 +725,15 @@ newScriptName.addEventListener("change", async ()=>{
       return; 
     }
     
-    // 🔴 UPDATE KE DATABASE - BAGIAN UTAMA
     const { error:err1 } = await db.from("dialogs").update({script_name:baru}).eq("script_name", lama);
     const { error:err2 } = await db.from("actors").update({script_name:baru}).eq("script_name", lama);
     
     if(err1 || err2) throw err1 || err2;
 
-    // Update variabel
     currentScript = baru; 
     localStorage.setItem("currentScript", currentScript);
     
     alert("✅ Nama berhasil diubah!"); 
-    
-    // 🔄 MUAT ULANG DAFTAR
     await renderScriptSelector(); 
     
   } catch (err) {
@@ -403,31 +743,50 @@ newScriptName.addEventListener("change", async ()=>{
   }
 });
 
-// ✅ BUAT SCRIPT BARU - DIPERBAIKI
+// ✅ SIMPAN GENRE KE TABEL dialogs (TANPA TABEL TAMBAHAN)
+saveGenreBtn.addEventListener("click", async () => {
+  const genreBaru = genreInput.value.trim();
+  currentGenre = genreBaru;
+  localStorage.setItem("currentGenre", currentGenre);
+  updateGenreDisplay();
+
+  try {
+    // ✅ HANYA UPDATE TABEL dialogs (yang sudah ada kolom genre)
+    const { error:err } = await db.from("dialogs").update({ genre: currentGenre }).eq("script_name", currentScript);
+
+    if (err) throw err;
+    alert("✅ Genre berhasil ditambahkan & tersimpan!");
+  } catch (err) {
+    console.error("❌ Gagal simpan genre:", err);
+    alert("❌ Gagal menyimpan genre: " + err.message);
+  }
+});
+
+// ✅ BUAT SCRIPT BARU
 createScriptBtn.addEventListener("click", async ()=>{
   const n = newScriptName.value.trim(); 
+  const g = ""; // Genre baru kosong dulu
   if(!n) return alert("❌ Isi nama dulu!");
   
   try {
-    // Cek nama ada?
     const { data:cari } = await db.from("dialogs").select("script_name").eq("script_name", n).limit(1);
     if(cari.length > 0) { 
       alert("❌ Nama sudah ada!"); 
       return; 
     }
 
-    // Simpan data awal
-    await simpanAwal(n);
+    await simpanAwal(n, g);
 
-    // Ganti ke baru
     currentScript = n; 
+    currentGenre = g;
+    genreInput.value = "";
+    updateGenreDisplay();
     localStorage.setItem("currentScript", currentScript);
+    localStorage.setItem("currentGenre", currentGenre);
     allScenes = {}; 
     actors = []; 
     
     alert("✅ Script Baru Dibuat!");
-    
-    // 🔄 MUAT ULANG
     await renderScriptSelector(); 
     renderActors(); 
     loadScene();
@@ -446,7 +805,11 @@ deleteScriptBtn.addEventListener("click", async ()=>{
   await db.from("actors").delete().eq("script_name", currentScript);
   
   currentScript = "Script Baru"; 
+  currentGenre = "";
+  genreInput.value = "";
+  updateGenreDisplay();
   localStorage.setItem("currentScript", currentScript);
+  localStorage.setItem("currentGenre", currentGenre);
   await renderScriptSelector(); 
   loadFromSupabase(); 
   loadActorsFromSupabase();
@@ -476,14 +839,14 @@ function getAvatar(){ return document.querySelector('input[name="avatar"]:checke
 function avatarSrc(a){ return a==="female"?"./ico/female.png":"./ico/male.png"; }
 function getWeather(){ return document.querySelector('input[name="weather"]:checked').value; }
 
-// ✅ SIMPAN SCENE - DIPERBAIKI AGAR MASUK DATABASE
+// ✅ SIMPAN SCENE
 saveSceneBtn.addEventListener("click", async ()=>{
   const s=getScene(); 
   s.place=placeInput.value; 
   s.situation=situationInput.value; 
   s.weather=getWeather(); 
   
-  await saveAll(); // <-- PANGGIL SIMPAN
+  await saveAll(); 
   renderScript();
   alert("✅ Scene Disimpan ke Database");
 });
@@ -564,18 +927,18 @@ window.hapusDialog=function(i){
   } 
 };
 
-// ✅ FUNGSI UTAMA SIMPAN KE DATABASE - LOGIKA DIPERBAIKI TOTAL
+// ✅ FUNGSI UTAMA SIMPAN KE DATABASE
 async function saveAll(){
   const namaScript = currentScript || "Script Baru";
+  const genreSkrg = currentGenre || "";
   const rows = [];
 
-  // Susun data
   Object.keys(allScenes).forEach(nomorScene=>{
     const dataScene = allScenes[nomorScene];
     if(dataScene.dialogs.length === 0) {
-      // Data kosong
       rows.push({
         script_name: namaScript,
+        genre: genreSkrg,
         scene: nomorScene,
         place: dataScene.place || "",
         situation: dataScene.situation || "",
@@ -586,10 +949,10 @@ async function saveAll(){
         avatar: "male"
       });
     } else {
-      // Data ada dialog
       dataScene.dialogs.forEach(dialog=>{
         rows.push({
           script_name: namaScript,
+          genre: genreSkrg,
           scene: nomorScene,
           place: dataScene.place || "",
           situation: dataScene.situation || "",
@@ -605,18 +968,16 @@ async function saveAll(){
 
   try {
     console.log("💾 Menyimpan:", rows);
-    // Hapus data lama
     const { error:errHapus } = await db.from("dialogs").delete().eq("script_name", namaScript);
     if(errHapus) throw errHapus;
 
-    // Masukkan data baru
     if(rows.length > 0){
       const { error:errSimpan } = await db.from("dialogs").insert(rows);
       if(errSimpan) throw errSimpan;
     }
     
     console.log("✅ BERHASIL DISIMPAN!");
-    await renderScriptSelector(); // <-- Otomatis perbarui daftar
+    await renderScriptSelector();
 
   } catch (err) {
     console.error("❌ GAGAL SIMPAN:", err);
@@ -632,6 +993,14 @@ async function loadFromSupabase(){
   if(error) { console.error("❌ Gagal Ambil:", error); return; }
   
   allScenes={};
+  if(data && data.length > 0) {
+    // Ambil genre
+    currentGenre = data[0].genre || "";
+    genreInput.value = currentGenre;
+    updateGenreDisplay();
+    localStorage.setItem("currentGenre", currentGenre);
+  }
+  
   data?.forEach(r=>{
     if(!allScenes[r.scene]) allScenes[r.scene]={place:"",situation:"",weather:"☀️ Cerah",dialogs:[]};
     allScenes[r.scene].place = r.place; 
@@ -702,15 +1071,30 @@ async function loadActorsFromSupabase(){
 
 // ==================== VIEWER ====================
 viewScriptBtn.addEventListener("click", ()=>{
-  document.querySelector(".Container").style.display="none";
+  document.querySelector(".container").style.display="none";
   scriptViewer.style.display="block";
-  let html=`<div class="viewer-paper"><div class="viewer-top"><button class="viewer-back" onclick="kembaliKeEdit()">Kembali</button><button class="viewer-print" onclick="window.print()">🖨️ Print</button></div><div class="viewer-title">🎬 ${currentScript}</div>`;
+  
+  let html=`<div class="viewer-paper"><div class="viewer-top"><button class="viewer-back" onclick="kembaliKeEdit()">Kembali</button><button class="viewer-print" onclick="window.print()">🖨️ Print</button></div>
+  <div class="viewer-title">🎬 ${currentScript}</div>
+  <!-- ✅ GENRE DITAMPILKAN DI SINI -->
+  <div class="viewer-genre">📂 Genre: ${currentGenre || "-"}</div>`;
+  
   for(let i=1;i<=40;i++){
-    const s=allScenes[i]; if(!s)continue; const d=s.dialogs||[]; if(!s.place&&!s.situation&&d.length===0)continue;
+    const s=allScenes[i]; 
+    if(!s)continue; 
+    const d=s.dialogs||[]; 
+    if(!s.place&&!s.situation&&d.length===0)continue;
+    
     html+=`<div class="viewer-scene"><div class="viewer-scene-title">SCENE ${i}</div><div class="viewer-info"><div><b>📍 Tempat:</b> ${s.place||"-"}</div><div><b>🎭 Situasi:</b> ${s.situation||"-"}</div><div><b>🌤️ Cuaca:</b> ${s.weather||"☀️ Cerah"}</div></div>`;
+    
     d.forEach(item=>{
-      const c=["red","blue","green","purple","yellow","cyan","orange"]; let h=0; for(let x=0;x<item.name.length;x++)h+=item.name.charCodeAt(x); const w=c[h%c.length];
+      const c=["red","blue","green","purple","yellow","cyan","orange"]; 
+      let h=0; 
+      for(let x=0;x<item.name.length;x++)h+=item.name.charCodeAt(x); 
+      const w=c[h%c.length];
+      
       const ak=actors.find(a=>a.name.toLowerCase()===item.name.toLowerCase());
+      
       html+=`<div class="viewer-dialog" data-color="${w}"><div class="viewer-character">${item.name}</div><div class="viewer-role">${ak?.role||""}</div><div class="viewer-message">${item.text}</div></div>`;
     });
     html+=`</div>`;
@@ -718,13 +1102,19 @@ viewScriptBtn.addEventListener("click", ()=>{
   html+=`</div>`;
   scriptViewer.innerHTML=html;
 });
-window.kembaliKeEdit=function(){ scriptViewer.style.display="none"; document.querySelector(".Container").style.display="grid"; };
+
+window.kembaliKeEdit=function(){ 
+  scriptViewer.style.display="none"; 
+  document.querySelector(".container").style.display="grid"; 
+};
 
 copyBtn.addEventListener("click", ()=>{
-  let teks=`NASKAH: ${currentScript}\n\n`;
+  let teks=`NASKAH: ${currentScript}\nGENRE: ${currentGenre || "-"}\n\n`;
   Object.keys(allScenes).sort((a,b)=>a-b).forEach(n=>{
-    const s=allScenes[n]; teks+=`=== SCENE ${n} ===\nTempat: ${s.place}\nSituasi: ${s.situation}\nCuaca: ${s.weather}\n`;
-    s.dialogs.forEach(d=>teks+=`${d.name}: ${d.text}\n`); teks+="\n";
+    const s=allScenes[n]; 
+    teks+=`=== SCENE ${n} ===\nTempat: ${s.place}\nSituasi: ${s.situation}\nCuaca: ${s.weather}\n`;
+    s.dialogs.forEach(d=>teks+=`${d.name}: ${d.text}\n`); 
+    teks+="\n";
   });
   navigator.clipboard.writeText(teks).then(()=>alert("✅ Disalin!"));
 });
