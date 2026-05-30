@@ -2335,14 +2335,17 @@ function loadScene(){
 
 async function loadFromSupabase(){
 
+  console.log("CURRENT SCRIPT:", currentScript);
+
   const { data, error } = await db
   .from("dialogs")
   .select("*")
   .eq("script_name", currentScript)
   .order("id", { ascending: true });
 
-if(error){
-  console.log(error);
+  if(error){
+  console.error("SUPABASE ERROR:", error);
+  alert(JSON.stringify(error));
   return;
 }
 
@@ -2537,6 +2540,8 @@ const actorTableBody = document.getElementById("actorTableBody");
 let editActorIndex = null;
 
 async function loadActorsFromSupabase(){
+
+  console.log("CURRENT SCRIPT:", currentScript);
 
 const { data, error } = await db
   .from("actors")
