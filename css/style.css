@@ -67,6 +67,38 @@ body{margin:0;font-family:Arial,sans-serif;background:#111}
   margin-bottom:25px;
 }
 
+/* === STYLE BARU TOMBOL BUAT NASKAH === */
+.create-script-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+  transition: all 0.3s ease;
+  width: auto !important;
+  margin-top: 8px;
+}
+
+
+
+.create-script-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 8px rgba(37, 99, 235, 0.2);
+}
+
+.create-script-btn svg {
+  stroke-width: 2.5;
+
+}
+
 .title-bar h1{margin:0;font-size:36px}
 
 .chat-area{

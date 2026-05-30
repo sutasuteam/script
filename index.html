@@ -5,6 +5,98 @@
 <title>Film Script</title>
 <link rel="icon" type="image/x-icon" href="./ico/movies.png">
 <link rel="stylesheet" href="css/style.css">
+
+<style>
+/* === PERBAIKAN TOTAL POSISI & TAMPILAN === */
+.title-bar {
+  display: flex !important;
+  align-items: center !important; /* KUNCI: Semua elemen rata tengah vertikal */
+  justify-content: space-between !important;
+  position: relative !important;
+  width: 100% !important;
+  padding: 10px 0 !important;
+  margin-bottom: 15px !important;
+}
+
+.title-left {
+  display: flex !important;
+  align-items: center !important; /* Judul & Tombol + SEJAJAR */
+  gap: 16px !important; /* Jarak antara judul dan tombol */
+}
+
+/* INPUT JUDUL SCRIPT */
+.movie-title-wrap {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  font-size: 24px !important;
+  font-weight: bold !important;
+}
+.movie-title-input {
+  font-size: 24px !important;
+  font-weight: bold !important;
+  border: none !important;
+  outline: none !important;
+  background: transparent !important;
+}
+
+/* TOMBOL + : UKURAN & POSISI PAS */
+.create-script-btn {
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
+  padding: 0 !important;
+  border: none !important;
+  border-radius: 8px !important;
+  background-color: #1a1a1a !important;
+  color: #ffffff !important; /* Warna putih */
+  font-size: 26px !important; /* Ukuran besar */
+  font-weight: bold !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  line-height: 1 !important;
+  margin: 0 !important;
+  position: static !important; /* Hapus posisi aneh */
+  transform: none !important;
+}
+.create-script-btn:hover {
+  background-color: #000 !important;
+}
+
+/* KOTAK TOMBOL KANAN: RATA TINGGI */
+.title-actions {
+  display: flex !important;
+  align-items: center !important; /* Semua tombol di kanan rata tengah */
+  gap: 8px !important;
+}
+
+/* STANDAR SEMUA TOMBOL AGAR SAMA */
+.copy-btn, .logout-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 36px !important; /* TINGGI SAMA DENGAN TOMBOL + */
+  padding: 0 14px !important;
+  border: none !important;
+  border-radius: 8px !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  margin: 0 !important;
+}
+.copy-btn {
+  background-color: #1a1a1a !important;
+  color: #fff !important;
+}
+.logout-btn {
+  background-color: #dc2626 !important;
+  color: #fff !important;
+}
+</style>
+
 </head>
 <body>
 
@@ -28,6 +120,7 @@
           <span class="movie-icon">🎬</span>
           <input type="text" id="newScriptName" class="movie-title-input" placeholder="Nama Script..." value="" spellcheck="false" autocomplete="off">
         </div>
+        <!-- TOMBOL + SUDAH DIPERBAIKI POSISINYA -->
         <button id="createScriptBtn" class="create-script-btn">➕</button>
       </div>
       <div class="title-actions">
@@ -609,7 +702,7 @@ async function loadActorsFromSupabase(){
 
 // ==================== VIEWER ====================
 viewScriptBtn.addEventListener("click", ()=>{
-  document.querySelector(".container").style.display="none";
+  document.querySelector(".Container").style.display="none";
   scriptViewer.style.display="block";
   let html=`<div class="viewer-paper"><div class="viewer-top"><button class="viewer-back" onclick="kembaliKeEdit()">Kembali</button><button class="viewer-print" onclick="window.print()">🖨️ Print</button></div><div class="viewer-title">🎬 ${currentScript}</div>`;
   for(let i=1;i<=40;i++){
@@ -625,7 +718,7 @@ viewScriptBtn.addEventListener("click", ()=>{
   html+=`</div>`;
   scriptViewer.innerHTML=html;
 });
-window.kembaliKeEdit=function(){ scriptViewer.style.display="none"; document.querySelector(".container").style.display="grid"; };
+window.kembaliKeEdit=function(){ scriptViewer.style.display="none"; document.querySelector(".Container").style.display="grid"; };
 
 copyBtn.addEventListener("click", ()=>{
   let teks=`NASKAH: ${currentScript}\n\n`;
