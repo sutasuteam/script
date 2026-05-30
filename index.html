@@ -2088,6 +2088,16 @@ newScriptName.value = currentScript;
 
 }
 
+newScriptName.oninput = function(){
+
+const value = this.value.trim();
+
+if(value === "") return;
+
+currentScript = value;
+
+};
+
 
 createScriptBtn.addEventListener("click", function(){
 
@@ -2562,7 +2572,7 @@ localStorage.setItem(
 const deleteResult = await db
   .from("actors")
   .delete()
-  .neq("id", 0);
+  .eq("script_name", currentScript);
 
 if(deleteResult.error){
   console.log(deleteResult.error);
@@ -2571,13 +2581,20 @@ if(deleteResult.error){
 
 if(actors.length > 0){
 
-  const insertResult = await db
-    .from("actors")
-    .insert(actors);
+const actorRows = actors.map(actor => ({
+  script_name: currentScript,
+  name: actor.name,
+  role: actor.role,
+  trait: actor.trait
+}));
 
-  if(insertResult.error){
-    console.log(insertResult.error);
-  }
+const insertResult = await db
+  .from("actors")
+  .insert(actorRows);
+
+if(insertResult.error){
+  console.log(insertResult.error);
+}
 
 }
 
@@ -2653,7 +2670,13 @@ addActorBtn.addEventListener("click", async function(){
   }
 
   await saveActors();
-  renderActors();
+
+scripts[currentScript].actors = actors;
+
+saveScripts();
+
+renderActors();
+renderScript();
 
   actorNameInput.value = "";
   actorRoleInput.value = "";
@@ -2661,14 +2684,16 @@ addActorBtn.addEventListener("click", async function(){
 });
 
 window.editActor = function(index){
-  const actor = actors[index];
 
-  actorNameInput.value = actor.name;
-  actorRoleInput.value = actor.role || "";
-  actorTraitInput.value = actor.trait;
+const actor = actors[index];
 
-  editActorIndex = index;
-  addActorBtn.innerText = "Simpan Tokoh";
+actorNameInput.value = actor.name || "";
+actorRoleInput.value = actor.role || "";
+actorTraitInput.value = actor.trait || "";
+
+editActorIndex = index;
+
+addActorBtn.innerText = "💾 Simpan Perubahan";
 };
 
 window.deleteActor = async function(index){
@@ -2762,15 +2787,7 @@ await loadActorsFromSupabase();
 
 renderScriptSelector();
 
-setInterval(async ()=>{
-
-  if(document.activeElement !== situationInput){
-    await loadFromSupabase();
-  }
-
-  await loadActorsFromSupabase();
-
-}, 10000);
+// Auto sync dimatikan
 
 }
 
