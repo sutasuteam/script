@@ -2240,6 +2240,7 @@ Object.keys(allScenes).forEach(function(sceneNumber){
   if(dialogs.length === 0){
 
     rows.push({
+      script_name: currentScript,
       scene: sceneNumber,
       place: scene.place || "",
       situation: scene.situation || "",
@@ -2255,6 +2256,7 @@ Object.keys(allScenes).forEach(function(sceneNumber){
     dialogs.forEach(function(item){
 
       rows.push({
+        script_name: currentScript,
         scene: sceneNumber,
         place: scene.place || "",
         situation: scene.situation || "",
@@ -2276,7 +2278,7 @@ console.log("Data yang dikirim:", rows);
 const deleteResult = await db
   .from("dialogs")
   .delete()
-  .neq("id", 0);
+  .eq("script_name", currentScript);
 
 if(deleteResult.error){
   alert("DELETE ERROR: " + deleteResult.error.message);
@@ -2333,9 +2335,10 @@ function loadScene(){
 
 async function loadFromSupabase(){
 
-const { data, error } = await db
+  const { data, error } = await db
   .from("dialogs")
   .select("*")
+  .eq("script_name", currentScript)
   .order("id", { ascending: true });
 
 if(error){
@@ -2538,6 +2541,7 @@ async function loadActorsFromSupabase(){
 const { data, error } = await db
   .from("actors")
   .select("*")
+  .eq("script_name", currentScript)
   .order("id", { ascending:true });
 
 if(error){
@@ -2553,8 +2557,6 @@ saveScripts();
 
 renderScriptSelector();
 renderActors();
-
-startApp();
 
 }
 
@@ -2586,6 +2588,7 @@ const actorRows = actors.map(actor => ({
   name: actor.name,
   role: actor.role,
   trait: actor.trait
+  
 }));
 
 const insertResult = await db
