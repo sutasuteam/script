@@ -284,18 +284,30 @@
   background-color: #000 !important;
 }
 
-/* === STYLE DIALOG TOOLS SESUAI GAMBAR === */
+/* === STYLE DIALOG TOOLS DAN SCENE TOOLS - DISEJAJARKAN === */
 .tools-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
   margin-top: 20px;
+  align-items: start !important;
 }
 .scene-tools, .dialog-tools {
   background: #fff;
   padding: 15px;
   border-radius: 8px;
   border: 1px solid #eee;
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  box-sizing: border-box !important;
+}
+.scene-tools > div, .dialog-tools > div {
+  flex-grow: 0 !important;
+}
+.scene-tools .spacer, .dialog-tools .spacer {
+  flex-grow: 1 !important;
+  min-height: 20px !important;
 }
 .dialog-tools input, .dialog-tools textarea, .dialog-tools select {
   width: 100%;
@@ -322,7 +334,7 @@
 .icon-picker input:checked + img {
   border-color: #007bff;
 }
-.dialog-tools button {
+.dialog-tools button, .scene-tools button {
   width: 100%;
   padding: 10px;
   border: none;
@@ -331,12 +343,14 @@
   font-weight: bold;
   cursor: pointer;
   margin: 5px 0;
+  box-sizing: border-box;
 }
-#addBtn {
+#saveSceneBtn, #addBtn {
   background-color: #000;
 }
-#clearBtn {
+#deleteSceneBtn, #clearBtn {
   background-color: #dc2626;
+  margin-top: auto !important;
 }
 
 /* === TAMBAHAN UNTUK TABEL PEMAIN === */
@@ -464,6 +478,7 @@
   <label><input type="radio" name="weather" value="🌫️ Kabut"><div class="weather-card">🌫️<span>Kabut</span></div></label>
 </div>
 
+        <div class="spacer"></div>
         <button id="saveSceneBtn" class="scene-btn">Simpan Scene</button>
         <button id="deleteSceneBtn" class="danger">Hapus Scene Ini</button>
       </div>
@@ -480,7 +495,9 @@
           <option value="left">Kiri</option>
           <option value="right">Kanan</option>
         </select>
-        <button id="addBtn">Tambah Dialog</button>
+
+        <div class="spacer"></div>
+        <button id="addBtn">Simpan Perubahan</button>
         <button id="clearBtn" class="danger">Hapus Semua Dialog</button>
       </div>
     </div>
@@ -529,7 +546,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-console.log("✅ TOMBOL DIPINDAH KE BAWAH GENRE");
+console.log("✅ TOMBOL HAPUS DISEJAJARKAN");
 const supabaseUrl = 'https://btajgtzfoyadcnqfgjsg.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ0YWpndHpmb3lhZGNucWZnanNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3NTQ3NzEsImV4cCI6MjA5NTMzMDc3MX0.kD81Imzw3NQ_ZTgj5nRPrKfh7Ong7Zmwt7I7WeyeM5M';
 const db = supabase.createClient(supabaseUrl, supabaseKey);
@@ -869,7 +886,7 @@ addBtn.addEventListener("click", ()=>{
   if(editIndex!==null){ 
     d[editIndex]={name:n,text:t,side:s,avatar:a}; 
     editIndex=null; 
-    addBtn.textContent="Tambah Dialog"; 
+    addBtn.textContent="Simpan Perubahan"; 
   } else { 
     d.push({name:n,text:t,side:s,avatar:a}); 
   }
