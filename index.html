@@ -1574,7 +1574,7 @@ button{
             id="newScriptName"
             class="movie-title-input"
             placeholder="Nama Script..."
-            value="Susah Untuk Bilang Cinta"
+            value=""
             spellcheck="false"
             autocomplete="off"
           >
@@ -1724,18 +1724,19 @@ button{
       </p>
     </div>
 
-    <div class="script-select-wrap">
-      
-      <select id="scriptSelector" class="script-select"></select>
-  
-      <button id="deleteScriptBtn" class="delete-script-btn">
-        🗑️
-      </button>
-  
-    </div>
+
   
     <div class="actor-mini-section">
 
+      <div class="script-select-wrap">
+      
+        <select id="scriptSelector" class="script-select"></select>
+    
+        <button id="deleteScriptBtn" class="delete-script-btn">
+          🗑️
+        </button>
+    
+      </div>
 
   
       <div class="actor-table-box">
@@ -1994,32 +1995,43 @@ for(let i=1;i<=40;i++){
 let scripts =
   JSON.parse(localStorage.getItem("movieScripts")) || {};
 
+let currentScript =
+  localStorage.getItem("currentScript");
+
+// jika belum ada script sama sekali
 if(Object.keys(scripts).length === 0){
 
-  scripts["Susah Untuk Bilang Cinta"] = {
+  const defaultName = "Script Baru";
+
+  scripts[defaultName] = {
     scenes:{},
     actors:[]
   };
 
+  currentScript = defaultName;
+
+  localStorage.setItem(
+    "movieScripts",
+    JSON.stringify(scripts)
+  );
+
+  localStorage.setItem(
+    "currentScript",
+    currentScript
+  );
 }
 
-let currentScript =
-  localStorage.getItem("currentScript");
-
-  if(!localStorage.getItem("movieScripts")){
-
-localStorage.setItem(
-  "movieScripts",
-  JSON.stringify(scripts)
-);
-
-}
-
+// jika script yang tersimpan sudah tidak ada
 if(
   !currentScript ||
   !scripts[currentScript]
 ){
   currentScript = Object.keys(scripts)[0];
+
+  localStorage.setItem(
+    "currentScript",
+    currentScript
+  );
 }
 
 let allScenes = scripts[currentScript].scenes;
@@ -2136,19 +2148,25 @@ loadScene();
 
 });
 
-newScriptName.addEventListener("input", function(){
+// sudah edit
+
+newScriptName.addEventListener("change", function(){
 
 const newName = newScriptName.value.trim();
 
-if(newName === "") return;
+if(!newName) return;
 
 if(newName === currentScript) return;
 
 if(scripts[newName]){
+  alert("Nama script sudah ada!");
+  newScriptName.value = currentScript;
   return;
 }
 
-scripts[newName] = scripts[currentScript];
+scripts[newName] = JSON.parse(
+  JSON.stringify(scripts[currentScript])
+);
 
 delete scripts[currentScript];
 
@@ -2156,11 +2174,7 @@ currentScript = newName;
 
 saveScripts();
 
-startApp();
-
 renderScriptSelector();
-
-
 
 });
 
